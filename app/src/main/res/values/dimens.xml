@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="search_margin">16dp</dimen>
+    <dimen name="sign_up_form">4dp</dimen>
+    <dimen name="signup_radius">2dp</dimen>
+    <dimen name="menu_top">5dp</dimen>
+    <dimen name="menu_categroies">6dp</dimen>
+</resources>
