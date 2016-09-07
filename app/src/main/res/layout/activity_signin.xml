@@ -54,7 +54,18 @@
             android:background="@mipmap/bg_et"
             android:gravity="center"
             android:hint="@string/sign_up_password"
-            android:inputType="textPassword|number"
+            android:inputType="textPassword"
+            android:textColor="@color/second_white" />
+
+        <Button
+            android:id="@+id/signin_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/password_et"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/menu_categroies"
+            android:background="@drawable/signup_btn"
+            android:text="@string/sign_in"
             android:textColor="@color/second_white" />
     </RelativeLayout>
 

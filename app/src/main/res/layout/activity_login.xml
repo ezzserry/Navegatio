@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="awstreams.redraccon.activities.Login_Activity">
+    tools:context=".activities.Sign_up_Activity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,38 +29,28 @@
                 android:src="@mipmap/logo_ic" />
 
             <EditText
-                android:id="@+id/firstname_et"
+                android:id="@+id/username_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/logo_iv"
                 android:layout_margin="@dimen/sign_up_form"
                 android:background="@mipmap/bg_et"
                 android:gravity="center"
-                android:inputType="textPersonName"
-                android:hint="@string/sign_up_first_name" />
+                android:hint="@string/sign_up_first_name"
+                android:inputType="textPersonName" />
 
 
-            <EditText
-                android:id="@+id/lastname_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/firstname_et"
-                android:layout_margin="@dimen/sign_up_form"
-                android:background="@mipmap/bg_et"
-                android:gravity="center"
-                android:hint="@string/sign_up_last_name"
-                android:inputType="textPersonName"/>
 
             <EditText
                 android:id="@+id/email_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lastname_et"
+                android:layout_below="@+id/username_et"
                 android:layout_margin="@dimen/sign_up_form"
                 android:background="@mipmap/bg_et"
                 android:gravity="center"
                 android:hint="@string/sign_up_email"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/password_et"
@@ -71,7 +61,7 @@
                 android:background="@mipmap/bg_et"
                 android:gravity="center"
                 android:hint="@string/sign_up_password"
-                android:inputType="textPassword|number"/>
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/age_et"
@@ -82,7 +72,7 @@
                 android:background="@mipmap/bg_et"
                 android:gravity="center"
                 android:hint="@string/sign_up_age"
-                android:inputType="number"/>
+                android:inputType="number" />
 
 
             <Button
@@ -132,24 +122,49 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_margin="@dimen/sign_up_form"
-                    android:background="@mipmap/ic_fb" />
+                    android:background="@mipmap/ic_fb"
+                    android:visibility="gone" />
 
                 <ImageButton
-                    android:id="@+id/twitter_et"
+                    android:id="@+id/twitter_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/sign_up_form"
                     android:layout_toEndOf="@+id/fb_btn"
-                    android:background="@mipmap/ic_twitter" />
+                    android:background="@mipmap/ic_twitter"
+                    android:visibility="gone" />
 
                 <ImageButton
-                    android:id="@+id/gmail_et"
+                    android:id="@+id/gmail_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/sign_up_form"
-                    android:layout_toEndOf="@+id/twitter_et"
+                    android:layout_toEndOf="@+id/twitter_btn"
                     android:background="@mipmap/ic_gmail" />
             </RelativeLayout>
+
+            <!--<com.twitter.sdk.android.core.identity.TwitterLoginButton-->
+            <!--android:id="@+id/twitter_Login"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:visibility="invisible" />-->
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/facebook_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp"
+                android:visibility="invisible" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/gmail_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

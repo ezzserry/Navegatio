@@ -8,7 +8,7 @@
     </item>
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/colorAccent"></solid>
+            <solid android:color="@color/colorPrimaryDark"></solid>
             <corners android:radius="@dimen/signup_radius" />
         </shape>
     </item>

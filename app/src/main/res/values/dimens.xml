@@ -10,4 +10,5 @@
     <dimen name="signup_radius">2dp</dimen>
     <dimen name="menu_top">5dp</dimen>
     <dimen name="menu_categroies">6dp</dimen>
+
 </resources>

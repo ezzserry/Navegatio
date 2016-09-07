@@ -15,10 +15,10 @@
 
 
     <LinearLayout
-        android:id="@+id/nav2_view"
+        android:id="@+id/sidemenu_ll"
         android:layout_width="180dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:background="@mipmap/menu_gray_bg"
         android:orientation="vertical">
 
@@ -276,5 +276,17 @@
 
 
     </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        style="@style/NavDrawerTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@mipmap/menu_gray_bg"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_side_menu_drawer"
+        />
 
 </android.support.v4.widget.DrawerLayout>
