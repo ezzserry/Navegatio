@@ -10,5 +10,10 @@
     <dimen name="signup_radius">2dp</dimen>
     <dimen name="menu_top">5dp</dimen>
     <dimen name="menu_categroies">6dp</dimen>
+    <dimen name="img_thumbnail_height">150dp</dimen>
+    <dimen name="img_thumbnail_width">150dp</dimen>
+    <dimen name="img_large_width">675dp</dimen>
+    <dimen name="img_large_height">482dp</dimen>
+    <dimen name="img_author">90dp</dimen>
 
 </resources>

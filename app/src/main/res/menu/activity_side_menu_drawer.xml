@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/hot">
-        <menu>
-            <item
-                android:id="@+id/latest_news_row_tv"
-                android:title="@string/latest_news" />
-            <item
-                android:id="@+id/trending_row_tv"
-                android:title="@string/trending" />
-            <item
-                android:id="@+id/most_viewed_row_tv"
-                android:title="@string/most_viewed" />
-        </menu>
-    </item>
+    <!--<item android:title="@string/hot">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/latest_news_row_tv"-->
+                <!--android:title="@string/latest_news" />-->
+            <!--<item-->
+                <!--android:id="@+id/trending_row_tv"-->
+                <!--android:title="@string/trending" />-->
+            <!--<item-->
+                <!--android:id="@+id/most_viewed_row_tv"-->
+                <!--android:title="@string/most_viewed" />-->
+        <!--</menu>-->
+    <!--</item>-->
 
-    <item android:title="@string/all">
-        <menu>
-            <item
-                android:id="@+id/buzz_row_tv"
-                android:title="@string/buzz" />
-            <item
-                android:id="@+id/music_row_tv"
-                android:title="@string/Music" />
-            <item
-                android:id="@+id/movies_row_tv"
-                android:title="@string/movies" />
-            <item
-                android:id="@+id/eats_row_tv"
-                android:title="@string/eats" />
-            <item
-                android:id="@+id/life_style_row_tv"
-                android:title="@string/life_style" />
-            <item
-                android:id="@+id/pop_cultural_row_tv"
-                android:title="@string/pop_culture" />
-            <item
-                android:id="@+id/events_row_tv"
-                android:title="@string/events" />
+    <item android:title="@string/all"
+        android:id="@+id/all">
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/buzz_row_tv"-->
+                <!--android:title="@string/buzz" />-->
+            <!--<item-->
+                <!--android:id="@+id/music_row_tv"-->
+                <!--android:title="@string/Music" />-->
+            <!--<item-->
+                <!--android:id="@+id/movies_row_tv"-->
+                <!--android:title="@string/movies" />-->
+            <!--<item-->
+                <!--android:id="@+id/eats_row_tv"-->
+                <!--android:title="@string/eats" />-->
+            <!--<item-->
+                <!--android:id="@+id/life_style_row_tv"-->
+                <!--android:title="@string/life_style" />-->
+            <!--<item-->
+                <!--android:id="@+id/pop_cultural_row_tv"-->
+                <!--android:title="@string/pop_culture" />-->
+            <!--<item-->
+                <!--android:id="@+id/events_row_tv"-->
+                <!--android:title="@string/events" />-->
+            <!--<item-->
+                <!--android:id="@+id/travel_row_tv"-->
+                <!--android:title="@string/events" />-->
 
-        </menu>
+
+        <!--</menu>-->
     </item>
 
 </menu>

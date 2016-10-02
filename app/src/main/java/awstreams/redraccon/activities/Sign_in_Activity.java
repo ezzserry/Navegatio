@@ -1,24 +1,35 @@
 package awstreams.redraccon.activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import awstreams.redraccon.R;
 import awstreams.redraccon.helpers.Constants;
+import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
 
 
 public class Sign_in_Activity extends Activity implements View.OnClickListener {
 
-    private EditText etEmail, etPassword;
+    private EditText etUsername, etPassword;
     private TextView tvSign_in;
     private Button btn_signin;
 
-    private String sEmail, sPassword;
+    private String sUsername, sPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +39,9 @@ public class Sign_in_Activity extends Activity implements View.OnClickListener {
     }
 
     private void initViews() {
-        etEmail = (EditText) findViewById(R.id.email_et);
+        etUsername = (EditText) findViewById(R.id.email_et);
         etPassword = (EditText) findViewById(R.id.password_et);
-        etEmail.setTypeface(Constants.getTypeface_Light(this));
+        etUsername.setTypeface(Constants.getTypeface_Light(this));
         etPassword.setTypeface(Constants.getTypeface_Light(this));
 
 
@@ -47,23 +58,59 @@ public class Sign_in_Activity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.signin_btn:
                 if (validateParams()) {
+                    Utils.showloading(this);
+                    signin();
                 }
                 break;
         }
 
     }
 
+    private void signin() {
+        ServicesHelper.getInstance().signIn(this, sUsername, sPassword, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String status = response.getString("status");
+                    if (status.equals("ok")) {
+                        Utils.dismissloading();
+                        String id = response.getJSONObject("user").getString("id");
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(Constants.isLoggedin, true);
+                        editor.putString(Constants.User_ID, id);
+                        editor.apply();
+                        Toast.makeText(getApplicationContext(), "Login succeeded", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Sign_in_Activity.this, Base_Activity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), response.getString("error"), Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
     private boolean validateParams() {
         boolean cancel = true;
-        etEmail.setError(null);
+        etUsername.setError(null);
         etPassword.setError(null);
 
-        sEmail = etEmail.getText().toString();
+        sUsername = etUsername.getText().toString();
         sPassword = etPassword.getText().toString();
 
-        if (sEmail.equals("") || !Utils.isEmailValid(sEmail)) {
-            etEmail.setError(getString(R.string.invalid_email));
-            etEmail.requestFocus();
+        if (etUsername.equals("")) {
+            etUsername.setError(getString(R.string.invalid_email));
+            etUsername.requestFocus();
             cancel = false;
 
         }

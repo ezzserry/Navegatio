@@ -12,35 +12,25 @@
         android:layout_height="?attr/actionBarSize">
 
 
-        <RelativeLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/bg_actionbar">
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:background="@mipmap/bg_actionbar"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_alignParentStart="true"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/menu_top"
-                android:layout_toEndOf="@+id/toolbar"
-                android:src="@mipmap/logo" />
 
-            <ImageButton
-                android:id="@+id/search_bar_ib"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/search_margin"
-                android:background="@mipmap/search" />
-        </RelativeLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/menu_top"
+                    android:layout_toEndOf="@+id/toolbar"
+                    android:src="@mipmap/logo" />
+        </android.support.v7.widget.Toolbar>
 
 
     </android.support.design.widget.AppBarLayout>

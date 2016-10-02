@@ -3,6 +3,7 @@
     package="awstreams.redraccon">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".helpers.MyApplication"
@@ -14,10 +15,7 @@
             android:name=".activities.Base_Activity"
             android:label="@string/title_activity_side_menu"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.Splash_Activity"
             android:screenOrientation="portrait"
@@ -31,13 +29,11 @@
         <activity
             android:name=".activities.Sign_up_Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.Sign_in_Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -47,10 +43,13 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="fc859c7933517f6aef1fe558890294a0fdba9366" />
+
+        <activity android:name=".activities.DetailedNews_Activity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
