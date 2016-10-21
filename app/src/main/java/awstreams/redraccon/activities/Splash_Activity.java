@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -13,23 +14,33 @@ import com.android.volley.VolleyError;
 import org.json.JSONObject;
 
 import awstreams.redraccon.R;
+import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
-import awstreams.redraccon.helpers.ServicesHelper;
+import awstreams.redraccon.notifications.RegistrationServices;
 
+//import awstreams.redraccon.helpers.ServicesHelper;
 public class Splash_Activity extends Activity {
 
-    private static int SPLASH_TIME_OUT = 2000;
+    private static int SPLASH_TIME_OUT = 2500;
 
     private boolean isLogged_in;
+    private Boolean isInternetPresent = false;
+    private ConnectionDetector cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        startService(new Intent(this, RegistrationServices.class));
+        float test=getResources().getDimension(R.dimen.nSubTitle);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         isLogged_in = prefs.getBoolean(Constants.isLoggedin, false);
-
+        cd = new ConnectionDetector(this);
+        isInternetPresent = cd.isConnectingToInternet();
+        if (!isInternetPresent) {
+            Toast.makeText(this, "no internet connection ", Toast.LENGTH_LONG).show();
+        }
         if (isLogged_in) {
             new Handler().postDelayed(new Runnable() {
 

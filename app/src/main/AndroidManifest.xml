@@ -3,19 +3,34 @@
     package="awstreams.redraccon">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
         android:name=".helpers.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo_ic"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true">
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.example.UPDATE_STATUS" />
+
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.hendiware.hellogcm" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".activities.Base_Activity"
             android:label="@string/title_activity_side_menu"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.Splash_Activity"
             android:screenOrientation="portrait"
@@ -29,7 +44,7 @@
         <activity
             android:name=".activities.Sign_up_Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.Sign_in_Activity"
             android:screenOrientation="portrait"
@@ -47,9 +62,29 @@
             android:name="io.fabric.ApiKey"
             android:value="fc859c7933517f6aef1fe558890294a0fdba9366" />
 
-        <activity android:name=".activities.DetailedNews_Activity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.DetailedNews_Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <service
+            android:name=".notifications.GCMListener"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service android:name=".notifications.RegistrationServices" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="591612271019181"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.TagActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

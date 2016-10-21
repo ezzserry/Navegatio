@@ -6,6 +6,7 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="search_margin">16dp</dimen>
+    <dimen name="cardview_margin">8dp</dimen>
     <dimen name="sign_up_form">4dp</dimen>
     <dimen name="signup_radius">2dp</dimen>
     <dimen name="menu_top">5dp</dimen>
@@ -16,4 +17,34 @@
     <dimen name="img_large_height">482dp</dimen>
     <dimen name="img_author">90dp</dimen>
 
+    <!--custom text sizes-->
+    <!--xxsmall-->
+    <dimen name="xxsTitle">10sp</dimen>
+    <dimen name="xxsSubTitle">7sp</dimen>
+    <dimen name="xxsButton">6sp</dimen>
+
+    <!--xsmall-->
+    <dimen name="xsTitle">13sp</dimen>
+    <dimen name="xsSubTitle">10sp</dimen>
+    <dimen name="xsButton">8sp</dimen>
+    <!--small-->
+    <dimen name="sTitle">15sp</dimen>
+    <dimen name="sSubTitle">13sp</dimen>
+    <dimen name="sButton">10sp</dimen>
+    <!--normal-->
+    <dimen name="nTitle">20sp</dimen>
+    <dimen name="nSubTitle">15sp</dimen>
+    <dimen name="nButton">13sp</dimen>
+    <!--large-->
+    <dimen name="lTitle">25sp</dimen>
+    <dimen name="lSubTitle">20sp</dimen>
+    <dimen name="lButton">16sp</dimen>
+    <!--xlarge-->
+    <dimen name="xlTitle">27sp</dimen>
+    <dimen name="xlSubTitle">23sp</dimen>
+    <dimen name="xlButton">20sp</dimen>
+    <!--xxlarge-->
+    <dimen name="xxlTitle">33sp</dimen>
+    <dimen name="xxlSubTitle">28sp</dimen>
+    <dimen name="xxlButton">23sp</dimen>
 </resources>

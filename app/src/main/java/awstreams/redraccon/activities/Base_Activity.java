@@ -6,16 +6,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.SearchView;
-import android.text.Spannable;
-import android.text.SpannableString;
+import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.SubMenu;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,8 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,28 +40,31 @@ import java.util.Arrays;
 import java.util.List;
 
 import awstreams.redraccon.R;
+import awstreams.redraccon.fragments.Feedback_Fragment;
 import awstreams.redraccon.fragments.Home_Fragment;
+import awstreams.redraccon.fragments.Setting_Fragment;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
-import awstreams.redraccon.helpers.CustomTypefaceSpan;
 import awstreams.redraccon.helpers.ServicesHelper;
-import awstreams.redraccon.helpers.Utils;
+import awstreams.redraccon.interfaces.OnCategoryClickListener;
 import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
 import awstreams.redraccon.models.Category;
 import awstreams.redraccon.models.NewsItem;
 
 public class Base_Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnNewsItemClickLitener {
+        implements OnNewsItemClickLitener, OnCategoryClickListener, View.OnClickListener {
 
-    private NavigationView navigationView;
     private String Bold = "bold";
     private String Light = "light";
     private List<Category> categoryList;
     private Category category;
     private Boolean isInternetPresent = false;
     private ConnectionDetector cd;
-    private TextView tvUsername, tvNickname, tvWelcome;
-    private Button btnSign_out;
+    private TextView tvUsername;
+    private LinearLayout rlCategoriesList;
+    private TextView tvFeedback, tvRate, tvSetting;
+    private OnCategoryClickListener mListener;
+    private TextView[] myTextViews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,35 +79,12 @@ public class Base_Activity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View hView = navigationView.getHeaderView(0);
-        tvUsername = (TextView) hView.findViewById(R.id.profile_username_tv);
-        tvNickname = (TextView) hView.findViewById(R.id.profile_nickname_tv);
-        tvWelcome = (TextView) hView.findViewById(R.id.welcome_tv);
-        tvUsername.setTypeface(Constants.getTypeface_Light(this));
-        tvNickname.setTypeface(Constants.getTypeface_Light(this));
-        tvWelcome.setTypeface(Constants.getTypeface_Medium(this));
-        btnSign_out = (Button) hView.findViewById(R.id.signout_btn);
+        initViews();
+        mListener = (OnCategoryClickListener) this;
+
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
-        btnSign_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isInternetPresent) {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean(Constants.isLoggedin, false);
-                    editor.putString(Constants.User_ID, "");
-                    editor.apply();
-                    Intent intent = new Intent(Base_Activity.this, Sign_up_Activity.class);
-                    startActivity(intent);
-                    finish();
 
-                } else
-                    Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG).show();
-            }
-        });
         if (isInternetPresent) {
             getUserInfo();
             getCategoriesList();
@@ -119,6 +96,7 @@ public class Base_Activity extends AppCompatActivity
 
     private void getUserInfo() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences.Editor editor = prefs.edit();
         String id = prefs.getString(Constants.User_ID, "");
         ServicesHelper.getInstance().getUserInfo(getApplicationContext(), id, new Response.Listener<JSONObject>() {
             @Override
@@ -127,8 +105,9 @@ public class Base_Activity extends AppCompatActivity
                     String status = response.getString("status");
                     if (status.equals("ok")) {
                         tvUsername.setText(response.getString("displayname"));
+                        editor.putString(Constants.User_NAME, response.getString("displayname"));
+                        editor.apply();
 //                        tvNickname.setText(response.getString("nickname"));
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -154,8 +133,7 @@ public class Base_Activity extends AppCompatActivity
                         Gson gson = new GsonBuilder().serializeNulls().create();
                         categoryList = Arrays.asList(gson.fromJson(categories.toString(), Category[].class));
                         updateNavigationList(categoryList);
-                        onNavigationItemSelected(navigationView.getMenu().getItem(0));
-//                        navigationView.getMenu().getItem(1).setChecked(true);
+                        onCategoryClick(categoryList.get(0), myTextViews[0]);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -170,108 +148,87 @@ public class Base_Activity extends AppCompatActivity
     }
 
 
-    private void updateNavigationList(List<Category> categoryList) {
+    private void updateNavigationList(final List<Category> categoryList) {
+        final int noTextviews = categoryList.size();
+        myTextViews = new TextView[noTextviews]; // create an empty array;
 
-        for (int i = 0; i < categoryList.size(); i++) {
+        for (int i = 0; i < noTextviews; i++) {
             category = categoryList.get(i);
-            int id = Integer.parseInt(category.getId());
-            navigationView.getMenu().add(1, id, i, category.getTitle());
+            category.setId(categoryList.get(i).getId());
+            category.setSlug(categoryList.get(i).getSlug());
+            category.setTitle(categoryList.get(i).getTitle());
+            LinearLayout.LayoutParams lprams = new LinearLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            TextView tvCategoryName = new TextView(this);
+            tvCategoryName.setText(category.getTitle());
+//            tvCategoryName.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(this,false,true,false));
+            tvCategoryName.setTextSize(15);
+            tvCategoryName.setLayoutParams(lprams);
+            tvCategoryName.setId(Integer.parseInt(category.getId()));
+            tvCategoryName.setTypeface(Constants.getTypeface_Light(this));
+            tvCategoryName.setGravity(Gravity.CENTER);
+            lprams.setMargins(0, 10, 0, 30);
+            rlCategoriesList.addView(tvCategoryName);
+            myTextViews[i] = tvCategoryName;
+
+            final int finalI = i;
+            tvCategoryName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        Category categoryItem = categoryList.get(finalI);
+                        mListener.onCategoryClick(categoryItem, myTextViews[finalI]);
+                    }
+                }
+            });
         }
-        setMenuFont();
+//        setMenuFont();
+
+
     }
 
     private void setMenuFont() {
-        Menu menu = navigationView.getMenu();
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem mi = menu.getItem(i);
-            //for applying a font to main menu
-
-            //for aapplying a font to subMenu ...
-            SubMenu subMenu = mi.getSubMenu();
-            if (subMenu != null && subMenu.size() > 0) {
-                for (int j = 0; j < subMenu.size(); j++) {
-                    MenuItem subMenuItem = subMenu.getItem(j);
-                    applyFontToMenuItem(subMenuItem, Bold);
-                }
-            }
-
-            //the method we have create in activity
-            applyFontToMenuItem(mi, Light);
+        for (int i = 0; i < myTextViews.length; i++) {
+            applySelectedCategFont(myTextViews[i], Light);
+            myTextViews[i].setTextSize(15);
         }
+
     }
 
-    private void applyFontToMenuItem(MenuItem mi, String fonttype) {
+    private void applySelectedCategFont(TextView category, String fonttype) {
         if (fonttype.equals(Light)) {
             Typeface font = Constants.getTypeface_Light(this);
-            SpannableString mNewTitle = new SpannableString(mi.getTitle());
-            mNewTitle.setSpan(new CustomTypefaceSpan("", font), 0, mNewTitle.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            mi.setTitle(mNewTitle);
+            category.setTypeface(font);
+
         } else if (fonttype.equals(Bold)) {
             Typeface font = Constants.getTypeface_Medium(this);
-            SpannableString mNewTitle = new SpannableString(mi.getTitle());
-            mNewTitle.setSpan(new CustomTypefaceSpan("", font), 0, mNewTitle.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            mi.setTitle(mNewTitle);
+            category.setTypeface(font);
         }
     }
 
-//    private void initViews() {
-//
-//        tvLatestNews = (TextView) lSidemenu.findViewById(R.id.latest_news_row_tv);
-//        tvLatestNews.setOnClickListener(this);
-//        tvLatestNews.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvTrending = (TextView) lSidemenu.findViewById(R.id.trending_row_tv);
-//        tvTrending.setOnClickListener(this);
-//        tvTrending.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvMostViewed = (TextView) lSidemenu.findViewById(R.id.most_viewed_row_tv);
-//        tvMostViewed.setOnClickListener(this);
-//        tvMostViewed.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvBuzz = (TextView) lSidemenu.findViewById(R.id.buzz_row_tv);
-//        tvBuzz.setOnClickListener(this);
-//        tvBuzz.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvMovies = (TextView) lSidemenu.findViewById(R.id.movies_row_tv);
-//        tvMovies.setOnClickListener(this);
-//        tvMovies.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvMusic = (TextView) lSidemenu.findViewById(R.id.music_row_tv);
-//        tvMusic.setOnClickListener(this);
-//        tvMusic.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvLifeStyle = (TextView) lSidemenu.findViewById(R.id.life_style_row_tv);
-//        tvLifeStyle.setOnClickListener(this);
-//        tvLifeStyle.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvPopCulture = (TextView) lSidemenu.findViewById(R.id.pop_cultural_row_tv);
-//        tvPopCulture.setOnClickListener(this);
-//        tvPopCulture.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvTravel = (TextView) lSidemenu.findViewById(R.id.travel_row_tv);
-//        tvTravel.setOnClickListener(this);
-//        tvTravel.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvEats = (TextView) lSidemenu.findViewById(R.id.eats_row_tv);
-//        tvEats.setOnClickListener(this);
-//        tvEats.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvEvents = (TextView) lSidemenu.findViewById(R.id.events_row_tv);
-//        tvEvents.setOnClickListener(this);
-//        tvEvents.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvFeedback = (TextView) lSidemenu.findViewById(R.id.menu_feedback_tv);
-//        tvFeedback.setOnClickListener(this);
-//        tvFeedback.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvRate = (TextView) lSidemenu.findViewById(R.id.menu_rate_us_tv);
-//        tvRate.setOnClickListener(this);
-//        tvRate.setTypeface(Constants.getTypeface_Light(this));
-//
-//        tvSetting = (TextView) lSidemenu.findViewById(R.id.menu_setting_tv);
-//        tvSetting.setOnClickListener(this);
-//        tvSetting.setTypeface(Constants.getTypeface_Light(this));
-//    }
+    private void initViews() {
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scrollview);
+        rlCategoriesList = (LinearLayout) nestedScrollView.findViewById(R.id.categories_rl);
+
+
+        tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
+        tvFeedback.setTypeface(Constants.getTypeface_Light(this));
+        tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+
+        tvRate = (TextView) nestedScrollView.findViewById(R.id.menu_rate_us_tv);
+        tvRate.setTypeface(Constants.getTypeface_Light(this));
+        tvRate.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+
+        tvSetting = (TextView) nestedScrollView.findViewById(R.id.menu_setting_tv);
+        tvSetting.setTypeface(Constants.getTypeface_Light(this));
+        tvSetting.setOnClickListener(this);
+        tvSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+
+        tvUsername = (TextView) findViewById(R.id.profile_username_tv);
+        tvUsername.setTypeface(Constants.getTypeface_Light(this));
+        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+    }
 
     @Override
     public void onBackPressed() {
@@ -283,26 +240,6 @@ public class Base_Activity extends AppCompatActivity
         }
     }
 
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        String id = String.valueOf(item.getItemId());
-        if (id.equals("") || id.equals(null) || id.isEmpty()) {
-            id = "62";
-        }
-        Fragment fragment = new Home_Fragment(id, null);
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment).commitAllowingStateLoss();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        setMenuFont();
-        applyFontToMenuItem(item, Bold);
-        return true;
-    }
 
     @Override
     public void onNewsItemClick(NewsItem newsItem) {
@@ -349,10 +286,66 @@ public class Base_Activity extends AppCompatActivity
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // Write your code here
-                onNavigationItemSelected(navigationView.getMenu().getItem(0));
+//                onNavigationItemSelected(navigationView.getMenu().getItem(0));
                 return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCategoryClick(Category category, TextView tvCategoryName) {
+        cd = new ConnectionDetector(this);
+        isInternetPresent = cd.isConnectingToInternet();
+        if (!isInternetPresent) {
+            Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG).show();
+        } else {
+            String id = String.valueOf(category.getId());
+            if (id.equals("") || id.equals(null) || id.isEmpty()) {
+                id = "62";
+            }
+            Fragment fragment = new Home_Fragment(id, null);
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment).commitAllowingStateLoss();
+
+            setMenuFont();
+            applySelectedCategFont(tvCategoryName, Bold);
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        Fragment fragment;
+        switch (v.getId()) {
+            case R.id.menu_setting_tv:
+                fragment = new Setting_Fragment();
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment).commitAllowingStateLoss();
+                setMenuFont();
+                applySelectedCategFont(tvSetting, Bold);
+
+                break;
+            case R.id.menu_feedback_tv:
+                fragment = new Feedback_Fragment();
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment).commitAllowingStateLoss();
+                setMenuFont();
+                applySelectedCategFont(tvFeedback, Bold);
+                break;
+            case R.id.menu_rate_us_tv:
+                break;
+        }
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+
     }
 }

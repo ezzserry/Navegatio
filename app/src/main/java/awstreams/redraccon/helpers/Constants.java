@@ -1,13 +1,17 @@
 package awstreams.redraccon.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
+
+import awstreams.redraccon.R;
 
 /**
  * Created by LENOVO on 29/08/2016.
  */
 public class Constants {
-
+    public static SharedPreferences sharedPreferences;
     public static Typeface typeface_Light, typeface_Medium;
 
     public static String Font_Medium = "DINPro_Medium.otf";
@@ -40,9 +44,89 @@ public class Constants {
     public static final String URL_GET_BASE_USER = URL_BASE + "user/";
     public static final String URL_GET_USER_INFO = URL_GET_BASE_USER + "get_userinfo/?insecure=cool&user_id=%s";
     public static final String URL_GET_SEARCH_RESULTS = URL_BASE + "core/get_search_results/?search=%s";
+    public static final String URL_FB_LOGIN = URL_BASE + "user/fb_connect/?insecure=cool&access_token=%s";
+    public static final String URL_FEEDBACK = "http://redracc.com/mobile-api/feedback.php/?username=%s&feedback=%s";
+    public static final String URL_NOTIFICATIONS = "http://redracc.com/pnfw/register/";
+    public static final String URL_GET_TAG = URL_BASE + "get_tag_posts/?id=%s";
 
+    public static final String isLoggedin = "isLogged";
+    public static final String User_ID = "userid";
+    public static final String User_NAME = "username";
+    public static final String defaultTextSize = "default";
+    public static final String fbAccessToken = "token";
 
-    public static String isLoggedin = "isLogged";
-    public static String User_ID = "";
+    ///////Notifications////////////
+    public static final String ifNotifications = "notifications";
+    public static final String Notifications_SenderID = "881010448427";
 
+    public static float getTextAppSize(Context context, boolean isTitle, boolean isSubtitle, boolean isButton) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        float textSize = sharedPreferences.getInt(Constants.defaultTextSize, 50);
+        if (isTitle) {
+            if (textSize <= 10) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xxsTitle);
+
+            } else if (textSize > 10 && textSize <= 30) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xsTitle);
+
+            } else if (textSize > 30 && textSize < 50) {
+                textSize = (int) context.getResources().getDimension(R.dimen.sTitle);
+
+            } else if (textSize == 50) {
+                textSize = (int) context.getResources().getDimension(R.dimen.nTitle);
+
+            } else if (textSize > 50 && textSize <= 65) {
+                textSize = (int) context.getResources().getDimension(R.dimen.lTitle);
+
+            } else if (textSize > 65 && textSize <= 80) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xlTitle);
+
+            } else if (textSize > 80) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xxlTitle);
+
+            }
+        } else if (isSubtitle) {
+            if (textSize <= 10) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xxsSubTitle);
+            } else if (textSize > 10 && textSize <= 30) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xsSubTitle);
+            } else if (textSize > 30 && textSize <50) {
+                textSize = (int) context.getResources().getDimension(R.dimen.sSubTitle);
+            } else if (textSize == 50) {
+                textSize = (int) context.getResources().getDimension(R.dimen.nSubTitle);
+            } else if (textSize > 50 && textSize <= 65) {
+                textSize = (int) context.getResources().getDimension(R.dimen.lSubTitle);
+            } else if (textSize > 65 && textSize <= 80) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xlSubTitle);
+            } else if (textSize > 80) {
+                textSize = (int) context.getResources().getDimension(R.dimen.xxlSubTitle);
+            }
+        } else if (isButton) {
+            if (textSize <= 10) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.xxsButton);
+            } else if (textSize > 10 && textSize <= 30) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.xsButton);
+            } else if (textSize > 30 && textSize < 50) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.sButton);
+            } else if (textSize == 50) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.nButton);
+            } else if (textSize > 50 && textSize <= 65) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.lButton);
+            } else if (textSize > 65 && textSize <= 80) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.xlButton);
+            } else if (textSize > 80) {
+
+                textSize = (int) context.getResources().getDimension(R.dimen.xxlButton);
+            }
+        }
+        float realTextSize = textSize / 2;
+
+        return realTextSize;
+    }
 }
