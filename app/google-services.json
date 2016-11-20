@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "232451251071",
+    "project_id": "redracc-141908"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232451251071:android:b88448a9851cd2cd",
+        "android_client_info": {
+          "package_name": "awstreams.redraccon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232451251071-l0os0dvhl57b7ua40251n62jm47mgm0g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "awstreams.redraccon",
+            "certificate_hash": "E2687C4A8C1DE8ED88E338A039B0DE4723C36055"
+          }
+        },
+        {
+          "client_id": "232451251071-fsi8tg1sqd0v19v9s1p2ucupsrk705l9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChosScoAwHtLQyq5OIqoOQnnQ1qxKQfPM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

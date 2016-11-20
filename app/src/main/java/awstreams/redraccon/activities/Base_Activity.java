@@ -266,7 +266,7 @@ public class Base_Activity extends AppCompatActivity
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
         if (isInternetPresent) {
-            String id = newsItem.getId();
+            String id = newsItem.getSlug();
             Intent intent = new Intent(this, DetailedNews_Activity.class);
             intent.putExtra(getResources().getString(R.string.post_intent_key), id);
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
