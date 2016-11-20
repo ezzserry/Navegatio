@@ -22,10 +22,12 @@ import awstreams.redraccon.helpers.Constants;
  * Created by LENOVO on 12/10/2016.
  */
 public class GCMListener extends GcmListenerService {
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!sharedPrefs.getBoolean(Constants.ifNotifications, false)) {
 
             super.onMessageReceived(from, data);
@@ -37,9 +39,11 @@ public class GCMListener extends GcmListenerService {
 
 
     private void sendNotification(String message, String id) {
-
+        editor = sharedPrefs.edit();
         Intent intent = new Intent(this, DetailedNews_Activity.class);
         intent.putExtra(getResources().getString(R.string.post_intent_key), id);
+        editor.putBoolean(Constants.isNotification, true);
+        editor.apply();
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

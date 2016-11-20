@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +47,9 @@ public class Feedback_Fragment extends Fragment implements View.OnClickListener 
 
     private void initViews() {
         etFeedback = (EditText) view.findViewById(R.id.feedback_et);
-        etFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(getActivity(),false,true,false));
+        etFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, true, false));
         btnSendFeedback = (Button) view.findViewById(R.id.feedback_btn);
-        btnSendFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(getActivity(),false,false,true));
+        btnSendFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, false, true));
 
     }
 
@@ -96,6 +97,31 @@ public class Feedback_Fragment extends Fragment implements View.OnClickListener 
                 Utils.dismissloading();
                 Toast.makeText(getActivity(), "failed , check your connection!!", Toast.LENGTH_LONG).show();
 
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (getView() == null) {
+            return;
+        }
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    Intent intent = new Intent(getActivity(), Base_Activity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                    return true;
+                }
+                return false;
             }
         });
     }

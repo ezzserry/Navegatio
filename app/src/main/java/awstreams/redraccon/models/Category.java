@@ -6,6 +6,17 @@ import com.google.gson.annotations.SerializedName;
  * Created by LENOVO on 27/09/2016.
  */
 public class Category {
+
+
+    public Category() {
+    }
+
+    public Category(String id, String slug, String title) {
+        this.id = id;
+        this.slug = slug;
+        this.title = title;
+    }
+
     @SerializedName("id")
     private String id;
 

@@ -6,19 +6,30 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import awstreams.redraccon.R;
+import awstreams.redraccon.activities.Base_Activity;
 import awstreams.redraccon.activities.Sign_up_Activity;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
+import awstreams.redraccon.helpers.ServicesHelper;
+import awstreams.redraccon.helpers.Utils;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -28,7 +39,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class Setting_Fragment extends Fragment implements View.OnClickListener {
     private View view;
     private SeekBar seekBar;
-    private TextView tvNotificationsTitle, tvLargeText, tvSmallText, tvTextSize, tvSignOut;
+    private TextView tvNotificationsTitle, tvLargeText, tvSmallText, tvTextSize, tvSignOut, tvUsername;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private Switch aSwitchNotifactions;
@@ -36,6 +47,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
     private boolean ifSwitch;
     private Boolean isInternetPresent = false;
     private ConnectionDetector cd;
+    private ImageButton ibEditProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,11 +56,21 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
         initViews();
         cd = new ConnectionDetector(getActivity());
         isInternetPresent = cd.isConnectingToInternet();
-
+        if (isInternetPresent) {
+            Utils.showloading(getActivity());
+            getUserInfo();
+        }
         return view;
     }
 
     private void initViews() {
+        ibEditProfile = (ImageButton) view.findViewById(R.id.edit_profile_ib);
+        ibEditProfile.setOnClickListener(this);
+
+        tvUsername = (TextView) view.findViewById(R.id.profile_username_tv);
+        tvUsername.setTypeface(Constants.getTypeface_Medium(getActivity()));
+        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), true, false, false));
+
         tvNotificationsTitle = (TextView) view.findViewById(R.id.notifications_tv);
         tvNotificationsTitle.setTypeface(Constants.getTypeface_Medium(getActivity()));
         tvNotificationsTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), true, false, false));
@@ -59,7 +81,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
 
         tvSmallText = (TextView) view.findViewById(R.id.textsmall_tv);
         tvSmallText.setTypeface(Constants.getTypeface_Light(getActivity()));
-        tvSmallText.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, true, false));
+        tvSmallText.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, false, true));
 
         tvLargeText = (TextView) view.findViewById(R.id.textlarge_tv);
         tvLargeText.setTypeface(Constants.getTypeface_Light(getActivity()));
@@ -125,10 +147,66 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                     Intent intent = new Intent(getActivity(), Sign_up_Activity.class);
                     startActivity(intent);
                     getActivity().finish();
-
                 } else
                     Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.edit_profile_ib:
+                break;
+
         }
     }
 
+    private void getUserInfo() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences.Editor editor = prefs.edit();
+        String id = prefs.getString(Constants.User_ID, "");
+        ServicesHelper.getInstance().getUserInfo(getApplicationContext(), id, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String status = response.getString("status");
+                    if (status.equals("ok")) {
+                        Utils.dismissloading();
+                        tvUsername.setText(response.getString("displayname"));
+                        editor.putString(Constants.User_NAME, response.getString("displayname"));
+                        editor.apply();
+                    }
+                } catch (JSONException e) {
+                    Utils.dismissloading();
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Utils.dismissloading();
+                Toast.makeText(getApplicationContext(), "couldn't load your profile information", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (getView() == null) {
+            return;
+        }
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    Intent intent = new Intent(getActivity(), Base_Activity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 }

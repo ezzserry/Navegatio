@@ -58,6 +58,8 @@ public class Constants {
     ///////Notifications////////////
     public static final String ifNotifications = "notifications";
     public static final String Notifications_SenderID = "881010448427";
+    public static final String isNotification = "notification";
+
 
     public static float getTextAppSize(Context context, boolean isTitle, boolean isSubtitle, boolean isButton) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

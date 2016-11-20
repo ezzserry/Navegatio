@@ -70,5 +70,8 @@
     <string name="invalid_username">enter your username</string>
 
     <string name="facebook_app_id">591612271019181</string>
+    <string name="title_activity_comments">Comments</string>
+    <string name="action_comment">Comment</string>
+    <string name="action_refresh">Reload</string>
 
 </resources>

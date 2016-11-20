@@ -32,6 +32,15 @@
                 android:layout_toEndOf="@+id/profile_pic_iv"
                 android:maxLines="2"
                 android:textColor="@color/second_white" />
+
+            <ImageButton
+                android:id="@+id/edit_profile_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:background="@android:drawable/ic_menu_edit"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <TextView

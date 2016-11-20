@@ -30,6 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,12 +41,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import awstreams.redraccon.R;
+import awstreams.redraccon.databases.CategoryModel;
 import awstreams.redraccon.fragments.Feedback_Fragment;
 import awstreams.redraccon.fragments.Home_Fragment;
 import awstreams.redraccon.fragments.Setting_Fragment;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
+import awstreams.redraccon.helpers.MyApplication;
 import awstreams.redraccon.helpers.ServicesHelper;
+import awstreams.redraccon.helpers.Utils;
 import awstreams.redraccon.interfaces.OnCategoryClickListener;
 import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
 import awstreams.redraccon.models.Category;
@@ -65,6 +69,8 @@ public class Base_Activity extends AppCompatActivity
     private TextView tvFeedback, tvRate, tvSetting;
     private OnCategoryClickListener mListener;
     private TextView[] myTextViews;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,12 +90,21 @@ public class Base_Activity extends AppCompatActivity
 
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
-
         if (isInternetPresent) {
             getUserInfo();
             getCategoriesList();
-        } else
-            Toast.makeText(this, "No internet connection to load the categories", Toast.LENGTH_LONG).show();
+        } else {
+            categoryList = new ArrayList<Category>();
+            List<CategoryModel> categoryModels = SQLite.select().from(CategoryModel.class).queryList();
+            if (categoryModels.size() >= 1) {
+                for (CategoryModel categoryModel : categoryModels) {
+                    categoryList.add(categoryModel.getCategory());
+                }
+                updateNavigationList(categoryList);
+                onCategoryClick(categoryList.get(0), myTextViews[0]);
+            } else
+                Toast.makeText(this, "No internet connection to load the categories", Toast.LENGTH_LONG).show();
+        }
 
 
     }
@@ -122,6 +137,7 @@ public class Base_Activity extends AppCompatActivity
     }
 
     private void getCategoriesList() {
+
         ServicesHelper.getInstance().getCategoryIndex(getApplicationContext(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -132,6 +148,10 @@ public class Base_Activity extends AppCompatActivity
                         JSONArray categories = response.getJSONArray("categories");
                         Gson gson = new GsonBuilder().serializeNulls().create();
                         categoryList = Arrays.asList(gson.fromJson(categories.toString(), Category[].class));
+                        for (Category category : categoryList) {
+                            CategoryModel categoryModel = new CategoryModel(category.getId(), category.getSlug(), category.getTitle());
+                            categoryModel.save();
+                        }
                         updateNavigationList(categoryList);
                         onCategoryClick(categoryList.get(0), myTextViews[0]);
                     }
@@ -214,20 +234,20 @@ public class Base_Activity extends AppCompatActivity
 
         tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
         tvFeedback.setTypeface(Constants.getTypeface_Light(this));
-        tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         tvRate = (TextView) nestedScrollView.findViewById(R.id.menu_rate_us_tv);
         tvRate.setTypeface(Constants.getTypeface_Light(this));
-        tvRate.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        tvRate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         tvSetting = (TextView) nestedScrollView.findViewById(R.id.menu_setting_tv);
         tvSetting.setTypeface(Constants.getTypeface_Light(this));
         tvSetting.setOnClickListener(this);
-        tvSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        tvSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
         tvUsername = (TextView) findViewById(R.id.profile_username_tv);
         tvUsername.setTypeface(Constants.getTypeface_Light(this));
-        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
     }
 
     @Override
@@ -243,10 +263,20 @@ public class Base_Activity extends AppCompatActivity
 
     @Override
     public void onNewsItemClick(NewsItem newsItem) {
-        String id = newsItem.getId();
-        Intent intent = new Intent(this, DetailedNews_Activity.class);
-        intent.putExtra(getResources().getString(R.string.post_intent_key), id);
-        startActivity(intent);
+        cd = new ConnectionDetector(this);
+        isInternetPresent = cd.isConnectingToInternet();
+        if (isInternetPresent) {
+            String id = newsItem.getId();
+            Intent intent = new Intent(this, DetailedNews_Activity.class);
+            intent.putExtra(getResources().getString(R.string.post_intent_key), id);
+            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            editor = sharedPrefs.edit();
+            editor.putBoolean(Constants.isNotification, false);
+            editor.apply();
+            startActivity(intent);
+        } else
+            Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -295,23 +325,18 @@ public class Base_Activity extends AppCompatActivity
 
     @Override
     public void onCategoryClick(Category category, TextView tvCategoryName) {
-        cd = new ConnectionDetector(this);
-        isInternetPresent = cd.isConnectingToInternet();
-        if (!isInternetPresent) {
-            Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG).show();
-        } else {
-            String id = String.valueOf(category.getId());
-            if (id.equals("") || id.equals(null) || id.isEmpty()) {
-                id = "62";
-            }
-            Fragment fragment = new Home_Fragment(id, null);
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment).commitAllowingStateLoss();
-
-            setMenuFont();
-            applySelectedCategFont(tvCategoryName, Bold);
+        String id = String.valueOf(category.getId());
+        if (id.equals("") || id.equals(null) || id.isEmpty()) {
+            id = "62";
         }
+        Fragment fragment = new Home_Fragment(id, null);
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment).commitAllowingStateLoss();
+
+        setMenuFont();
+        applySelectedCategFont(tvCategoryName, Bold);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
@@ -328,7 +353,6 @@ public class Base_Activity extends AppCompatActivity
                         .replace(R.id.container, fragment).commitAllowingStateLoss();
                 setMenuFont();
                 applySelectedCategFont(tvSetting, Bold);
-
                 break;
             case R.id.menu_feedback_tv:
                 fragment = new Feedback_Fragment();
@@ -341,7 +365,6 @@ public class Base_Activity extends AppCompatActivity
             case R.id.menu_rate_us_tv:
                 break;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
