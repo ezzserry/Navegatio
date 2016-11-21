@@ -165,10 +165,10 @@ public class Home_Fragment extends Fragment {
                                     String imgUrlFull = null;
                                     String imgUrlThumbnail = null;
 //                                    try {
-                                        imgUrlFull = newsItem.getImages().getFull().getUrl();
-                                        imgUrlThumbnail = newsItem.getThumbnail();
+                                    imgUrlFull = newsItem.getImages().getFull().getUrl();
+                                    imgUrlThumbnail = newsItem.getThumbnail();
 //                                        if (imgUrlFull != null && imgUrlThumbnail != null)
-                                            postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), sCategory_id);
+                                    postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), sCategory_id);
 //                                    }
 //                                    catch (NullPointerException e) {
 //

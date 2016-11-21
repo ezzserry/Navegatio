@@ -30,7 +30,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -80,9 +82,13 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     private boolean isLoading;
     private WebView mWebviewPop;
     private FrameLayout mContainer;
+    private Button btnPreviousPost, btnNextPost;
     // the default number of comments should be visible
     // on page load.
     private static final int NUMBER_OF_COMMENTS = 5;
+    private String sPreviousPost, sNextPost;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,11 +174,23 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                         Gson gson = new GsonBuilder().serializeNulls().create();
                         tagsList = Arrays.asList(gson.fromJson(tagsArray.toString(), Tags[].class));
                         updateTags(tagsList);
+                        try {
+                            sPreviousPost = response.getString("previous_url");
+                            sPreviousPost = sPreviousPost.substring(18);
+                            btnPreviousPost.setVisibility(View.VISIBLE);
 
-//                        webView_facebookComments.loadDataWithBaseURL("http://redracc.com/",
-//                                "<html><head></head><body><div id=\"fb-root\"></div><div id=\"fb-root\"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = \"http://connect.facebook.net/en_US/all.js#xfbml=1&appId=" + getResources().getString(R.string.facebook_app_id) + "\";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script><div class=\"fb-comments\" data-href=\""
-//                                        + "http://redracc.com/" + post.getString("slug") + "\" data-width=\"470\"></div> </body></html>", "text/html", null, null);
-//                        webView_facebookComments.setWebViewClient(new WebViewClientActivity());
+                        } catch (JSONException e) {
+                            sPreviousPost = null;
+
+                        }
+                        try {
+                            sNextPost = response.getString("next_url");
+                            sNextPost = sNextPost.substring(18);
+                            btnNextPost.setVisibility(View.VISIBLE);
+
+                        } catch (JSONException e) {
+                            sNextPost = null;
+                        }
                         setLoading(true);
                         loadComments(ShareURL);
 
@@ -186,8 +204,6 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                     ivPostimage.setImageResource(R.mipmap.placeholder);
                     ivAuthorimage.setVisibility(View.VISIBLE);
                     ivAuthorimage.setImageResource(R.mipmap.redracc_menu_logo);
-
-
                 }
             }
         }, new Response.ErrorListener() {
@@ -238,6 +254,14 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     }
 
     private void initViews() {
+        btnPreviousPost = (Button) findViewById(R.id.previous_post_ib);
+        btnPreviousPost.setOnClickListener(this);
+        btnPreviousPost.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, false, true));
+        btnPreviousPost.setVisibility(View.GONE);
+        btnNextPost = (Button) findViewById(R.id.next_post_ib);
+        btnNextPost.setOnClickListener(this);
+        btnNextPost.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, false, true));
+        btnNextPost.setVisibility(View.GONE);
         mContainer = (FrameLayout) findViewById(R.id.webview_frame);
         pbComments = (ProgressBar) findViewById(R.id.progressBar);
         pbComments.setVisibility(View.VISIBLE);
@@ -324,12 +348,33 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.fb_share_btn:
                 ShareLinkContent content = new ShareLinkContent.Builder()
                         .setContentUrl(Uri.parse(ShareURL))
                         .build();
                 btnShareFb.setShareContent(content);
+                break;
+
+            case R.id.previous_post_ib:
+                intent = new Intent(this, DetailedNews_Activity.class);
+                intent.putExtra(getResources().getString(R.string.post_intent_key), sPreviousPost);
+                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                editor = sharedPreferences.edit();
+                editor.putBoolean(Constants.isNotification, false);
+                editor.apply();
+                startActivity(intent);
+                break;
+
+            case R.id.next_post_ib:
+                intent = new Intent(this, DetailedNews_Activity.class);
+                intent.putExtra(getResources().getString(R.string.post_intent_key), sNextPost);
+                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                editor = sharedPreferences.edit();
+                editor.putBoolean(Constants.isNotification, false);
+                editor.apply();
+                startActivity(intent);
                 break;
         }
     }
@@ -495,7 +540,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         }
 
         if (item.getItemId() == R.id.action_refresh) {
-            webView_facebookComments.reload();
+            finish();
+            startActivity(getIntent());
         }
 
         return super.onOptionsItemSelected(item);

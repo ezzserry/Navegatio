@@ -14,6 +14,9 @@
     <string name="a_large">A</string>
     <string name="signout">S I G N   O U T</string>
 
+    <string name="previous_post">previous post</string>
+    <string name="next_post">next post</string>
+
     <string name="feedback_msg">send your feedback</string>
     <string name="feedback_send">Send</string>
 
