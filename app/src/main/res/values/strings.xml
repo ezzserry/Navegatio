@@ -35,9 +35,9 @@
     <string name="sign_up_password">Password</string>
     <string name="sign_up_location">Location</string>
     <string name="sign_up_age">Age</string>
-    <string name="sign_up_text">Sign Up</string>
+    <string name="sign_up_text">SIGN UP</string>
     <string name="already_have_account">Already have account ?</string>
-    <string name="sign_in">Sign in</string>
+    <string name="sign_in">SIGN IN</string>
     <string name="sign_out">Sign out</string>
 
 
@@ -76,5 +76,7 @@
     <string name="title_activity_comments">Comments</string>
     <string name="action_comment">Comment</string>
     <string name="action_refresh">Reload</string>
+
+    <string name="connection_error">Can\'t connect right now</string>
 
 </resources>

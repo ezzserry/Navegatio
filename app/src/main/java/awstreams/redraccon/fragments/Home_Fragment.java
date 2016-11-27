@@ -162,11 +162,11 @@ public class Home_Fragment extends Fragment {
                                 postItemsList = Arrays.asList(gson.fromJson(jsonArray.toString(), NewsItem[].class));
                                 for (NewsItem newsItem : postItemsList) {
                                     HomePostsModel postsModel = null;
-                                    String imgUrlFull = null;
-                                    String imgUrlThumbnail = null;
+//                                    String imgUrlFull = null;
+//                                    String imgUrlThumbnail = null;
 //                                    try {
-                                    imgUrlFull = newsItem.getImages().getFull().getUrl();
-                                    imgUrlThumbnail = newsItem.getThumbnail();
+//                                    imgUrlFull = newsItem.getImages().getFull().getUrl();
+//                                    imgUrlThumbnail = newsItem.getThumbnail();
 //                                        if (imgUrlFull != null && imgUrlThumbnail != null)
                                     postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), sCategory_id);
 //                                    }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardview_rl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/menu_top">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/menu_top">
+
+            <FrameLayout
+                android:id="@+id/frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/news_iv"
+                    android:layout_width="@dimen/img_thumbnail_height"
+                    android:layout_height="@dimen/img_thumbnail_height"
+                    android:background="@mipmap/placeholder"
+                    android:scaleType="fitXY"
+                    android:visibility="invisible" />
+
+                <ProgressBar
+                    android:id="@+id/loadingpanel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/frame"
+                android:gravity="start"
+                android:maxLines="2"
+                android:padding="@dimen/menu_top"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/subtitle_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_tv"
+                android:gravity="start"
+                android:maxLines="2"
+                android:padding="@dimen/menu_top"
+                android:textColor="@color/colorPrimary"
+                />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

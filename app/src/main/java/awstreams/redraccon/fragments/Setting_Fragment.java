@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -25,11 +26,13 @@ import org.json.JSONObject;
 
 import awstreams.redraccon.R;
 import awstreams.redraccon.activities.Base_Activity;
+import awstreams.redraccon.activities.Sign_in_Activity;
 import awstreams.redraccon.activities.Sign_up_Activity;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
+import awstreams.redraccon.models.User;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -48,17 +51,25 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
     private Boolean isInternetPresent = false;
     private ConnectionDetector cd;
     private ImageButton ibEditProfile;
+    private String sUsername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_setting, container, false);
         initViews();
+        sUsername = prefs.getString(Constants.User_NAME, "");
         cd = new ConnectionDetector(getActivity());
         isInternetPresent = cd.isConnectingToInternet();
-        if (isInternetPresent) {
-            Utils.showloading(getActivity());
-            getUserInfo();
+
+        if (!sUsername.equals(""))
+            tvUsername.setText(sUsername);
+        else {
+            if (isInternetPresent) {
+                Utils.showloading(getActivity());
+                getUserInfo();
+            } else
+                Toast.makeText(getActivity(), getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
         }
         return view;
     }
@@ -69,7 +80,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
 
         tvUsername = (TextView) view.findViewById(R.id.profile_username_tv);
         tvUsername.setTypeface(Constants.getTypeface_Medium(getActivity()));
-        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), true, false, false));
+        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, true, false));
 
         tvNotificationsTitle = (TextView) view.findViewById(R.id.notifications_tv);
         tvNotificationsTitle.setTypeface(Constants.getTypeface_Medium(getActivity()));
@@ -145,6 +156,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                     editor.putString(Constants.User_ID, "");
                     editor.apply();
                     Intent intent = new Intent(getActivity(), Sign_up_Activity.class);
+                    ActivityCompat.finishAffinity(getActivity());
                     startActivity(intent);
                     getActivity().finish();
                 } else

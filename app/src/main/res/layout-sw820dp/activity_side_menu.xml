@@ -137,33 +137,29 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/menu_categroies">
+                    android:padding="@dimen/sign_up_form">
 
                     <TextView
                         android:id="@+id/menu_setting_tv"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/menu_categroies"
-                        android:gravity="center"
+                        android:layout_alignParentStart="true"
                         android:text="@string/settings" />
 
                     <TextView
                         android:id="@+id/menu_rate_us_tv"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/menu_setting_tv"
-                        android:layout_margin="@dimen/menu_categroies"
-                        android:gravity="center"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="end"
                         android:text="@string/rate_us" />
 
                     <TextView
                         android:id="@+id/menu_feedback_tv"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/menu_rate_us_tv"
-                        android:layout_margin="@dimen/menu_categroies"
-                        android:gravity="center"
+                        android:layout_alignParentRight="true"
+                        android:gravity="end"
                         android:text="@string/feedback" />
 
                 </RelativeLayout>

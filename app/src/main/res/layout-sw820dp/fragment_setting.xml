@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bg_side_menu_top"
+            android:padding="@dimen/menu_categroies">
+
+            <ImageView
+                android:id="@+id/profile_pic_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/redracc_menu_logo" />
+
+            <TextView
+                android:id="@+id/profile_username_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/profile_pic_iv"
+                android:layout_margin="@dimen/menu_categroies"
+                android:layout_toEndOf="@+id/profile_pic_iv"
+                android:maxLines="2"
+                android:textColor="@color/second_white" />
+
+            <ImageButton
+                android:id="@+id/edit_profile_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:background="@android:drawable/ic_menu_edit"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/notifications_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/nav_header_vertical_spacing"
+            android:text="@string/notifications"
+            android:textColor="@color/colorPrimary" />
+
+        <Switch
+            android:id="@+id/notications_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="true" />
+
+        <TextView
+            android:id="@+id/textsize_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/nav_header_vertical_spacing"
+            android:text="@string/textsize"
+            android:textColor="@color/colorPrimary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textsmall_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/nav_header_vertical_spacing"
+                android:text="@string/a_small"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin" />
+
+            <TextView
+                android:id="@+id/textlarge_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/nav_header_vertical_spacing"
+                android:text="@string/a_large"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/signout_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:text="@string/signout"
+            android:textColor="@color/colorPrimaryDark" />
+    </LinearLayout>
+</ScrollView>

@@ -48,7 +48,7 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
     private EditText etEmail, etPassword, etUSername, etAge;
     private Button btnSign_up;
     private ImageButton ibFacebook, ibTwitter, ibGmail;
-    private TextView tvAlready_have_account, tvSingwith_social;
+    private TextView tvAlready_have_account, tvSingwith_social,tvSignUpTitle;
     private String sEmail, sPassword, sAge, sUsername;
     private SignInButton signInButton;
 
@@ -123,19 +123,20 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
         etPassword.setTypeface(Constants.getTypeface_Light(this));
         etUSername.setTypeface(Constants.getTypeface_Light(this));
         etAge.setTypeface(Constants.getTypeface_Light(this));
-        etEmail.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
-        etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
-        etUSername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
-        etAge.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
-
+//        etEmail.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+//        etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+//        etUSername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+//        etAge.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+        tvSignUpTitle=(TextView)findViewById(R.id.signintitle_tv);
+        tvSignUpTitle.setTypeface(Constants.getTypeface_Medium(this));
         tvAlready_have_account = (TextView) findViewById(R.id.already_have_acc_tv);
         tvAlready_have_account.setTypeface(Constants.getTypeface_Medium(this));
-        tvAlready_have_account.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+//        tvAlready_have_account.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
         tvAlready_have_account.setOnClickListener(this);
 
         tvSingwith_social = (TextView) findViewById(R.id.signin_tv);
         tvSingwith_social.setTypeface(Constants.getTypeface_Medium(this));
-        tvAlready_have_account.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, false, true));
+//        tvAlready_have_account.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, false, true));
 
 
         btnSign_up = (Button) findViewById(R.id.signup_btn);
@@ -205,7 +206,7 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
                 }
                 break;
             case R.id.fb_btn:
-                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends", "email"));
 
                 break;
 //            case R.id.twitter_btn:
@@ -471,6 +472,12 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
                     if (response.getString("status").equals("ok")) {
                         Toast.makeText(getApplicationContext(), response.getString("msg"), Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Sign_up_Activity.this, Base_Activity.class);
+                        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        editor = prefs.edit();
+                        editor.putString(Constants.User_NAME, response.getString("user_login"));
+                        editor.putString(Constants.User_ID, response.getString("wp_user_id"));
+                        editor.putBoolean(Constants.isLoggedin, true);
+                        editor.apply();
                         startActivity(intent);
                         finish();
                     }
@@ -510,8 +517,10 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mGoogleApiClient.stopAutoManage(this);
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.stopAutoManage(this);
+            mGoogleApiClient.disconnect();
+        }
     }
 
     private void stopAutoManage() {

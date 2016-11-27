@@ -1,9 +1,11 @@
 package awstreams.redraccon.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -90,10 +92,17 @@ public class Base_Activity extends AppCompatActivity
 
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        String username = sharedPrefs.getString(Constants.User_NAME, "");
         if (isInternetPresent) {
-            getUserInfo();
+            if (!username.equals("")) {
+                tvUsername.setText(username);
+            } else
+                getUserInfo();
             getCategoriesList();
         } else {
+            tvUsername.setText(username);
             categoryList = new ArrayList<Category>();
             List<CategoryModel> categoryModels = SQLite.select().from(CategoryModel.class).queryList();
             if (categoryModels.size() >= 1) {
@@ -103,7 +112,8 @@ public class Base_Activity extends AppCompatActivity
                 updateNavigationList(categoryList);
                 onCategoryClick(categoryList.get(0), myTextViews[0]);
             } else
-                Toast.makeText(this, "No internet connection to load the categories", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+
         }
 
 
@@ -208,24 +218,6 @@ public class Base_Activity extends AppCompatActivity
 
     }
 
-    private void setMenuFont() {
-        for (int i = 0; i < myTextViews.length; i++) {
-            applySelectedCategFont(myTextViews[i], Light);
-            myTextViews[i].setTextSize(15);
-        }
-
-    }
-
-    private void applySelectedCategFont(TextView category, String fonttype) {
-        if (fonttype.equals(Light)) {
-            Typeface font = Constants.getTypeface_Light(this);
-            category.setTypeface(font);
-
-        } else if (fonttype.equals(Bold)) {
-            Typeface font = Constants.getTypeface_Medium(this);
-            category.setTypeface(font);
-        }
-    }
 
     private void initViews() {
         NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scrollview);
@@ -235,11 +227,12 @@ public class Base_Activity extends AppCompatActivity
         tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
         tvFeedback.setTypeface(Constants.getTypeface_Light(this));
         tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvFeedback.setOnClickListener(this);
 
         tvRate = (TextView) nestedScrollView.findViewById(R.id.menu_rate_us_tv);
         tvRate.setTypeface(Constants.getTypeface_Light(this));
         tvRate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-
+        tvRate.setOnClickListener(this);
         tvSetting = (TextView) nestedScrollView.findViewById(R.id.menu_setting_tv);
         tvSetting.setTypeface(Constants.getTypeface_Light(this));
         tvSetting.setOnClickListener(this);
@@ -335,6 +328,7 @@ public class Base_Activity extends AppCompatActivity
                 .replace(R.id.container, fragment).commitAllowingStateLoss();
 
         setMenuFont();
+        setBottomMenuFont();
         applySelectedCategFont(tvCategoryName, Bold);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -352,6 +346,7 @@ public class Base_Activity extends AppCompatActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment).commitAllowingStateLoss();
                 setMenuFont();
+                setBottomMenuFont();
                 applySelectedCategFont(tvSetting, Bold);
                 break;
             case R.id.menu_feedback_tv:
@@ -360,9 +355,11 @@ public class Base_Activity extends AppCompatActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment).commitAllowingStateLoss();
                 setMenuFont();
+                setBottomMenuFont();
                 applySelectedCategFont(tvFeedback, Bold);
                 break;
             case R.id.menu_rate_us_tv:
+                rateOnStore();
                 break;
         }
 
@@ -370,5 +367,47 @@ public class Base_Activity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
 
+    }
+
+    private void setMenuFont() {
+        for (int i = 0; i < myTextViews.length; i++) {
+            applySelectedCategFont(myTextViews[i], Light);
+            myTextViews[i].setTextSize(15);
+        }
+
+    }
+
+    private void setBottomMenuFont() {
+        applySelectedCategFont(tvRate, Light);
+        applySelectedCategFont(tvFeedback, Light);
+        applySelectedCategFont(tvSetting, Light);
+
+    }
+
+    private void applySelectedCategFont(TextView category, String fonttype) {
+        if (fonttype.equals(Light)) {
+            Typeface font = Constants.getTypeface_Light(this);
+            category.setTypeface(font);
+
+        } else if (fonttype.equals(Bold)) {
+            Typeface font = Constants.getTypeface_Medium(this);
+            category.setTypeface(font);
+        }
+    }
+
+    private void rateOnStore() {
+        Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName())));
+        }
     }
 }

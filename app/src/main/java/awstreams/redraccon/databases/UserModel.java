@@ -11,6 +11,15 @@ import com.raizlabs.android.dbflow.annotation.Unique;
 @Table(database = AppDatabase.class)
 public class UserModel {
 
+    public UserModel(String email, String username, String id) {
+        this.email = email;
+        this.username = username;
+        this.id = id;
+    }
+
+    public UserModel() {
+    }
+
     @PrimaryKey
     @Unique
     @Column
@@ -23,12 +32,6 @@ public class UserModel {
     @Column
     String email;
 
-
-    public UserModel(String email, String username, String id) {
-        this.email = email;
-        this.username = username;
-        this.id = id;
-    }
 
     public String getId() {
         return id;

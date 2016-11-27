@@ -3,4 +3,51 @@
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
     <dimen name="activity_horizontal_margin">64dp</dimen>
+
+    <dimen name="activity_vertical_margin">64dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">64dp</dimen>
+    <dimen name="nav_header_height">640dp</dimen>
+    <dimen name="search_margin">64dp</dimen>
+    <dimen name="cardview_margin">32dp</dimen>
+    <dimen name="sign_up_form">16dp</dimen>
+    <dimen name="signup_radius">8dp</dimen>
+    <dimen name="menu_top">20dp</dimen>
+    <dimen name="menu_categroies">24dp</dimen>
+    <dimen name="img_thumbnail_height">150dp</dimen>
+    <dimen name="img_thumbnail_width">150dp</dimen>
+    <dimen name="img_large_width">675dp</dimen>
+    <dimen name="img_large_height">482dp</dimen>
+    <dimen name="img_author">360dp</dimen>
+
+    <!--custom text sizes-->
+    <!--xxsmall-->
+    <dimen name="xxsTitle">25sp</dimen>
+    <dimen name="xxsSubTitle">22sp</dimen>
+    <dimen name="xxsButton">21sp</dimen>
+
+    <!--xsmall-->
+    <dimen name="xsTitle">28sp</dimen>
+    <dimen name="xsSubTitle">25sp</dimen>
+    <dimen name="xsButton">23sp</dimen>
+    <!--small-->
+    <dimen name="sTitle">30sp</dimen>
+    <dimen name="sSubTitle">28sp</dimen>
+    <dimen name="sButton">25sp</dimen>
+    <!--normal-->
+    <dimen name="nTitle">35sp</dimen>
+    <dimen name="nSubTitle">30sp</dimen>
+    <dimen name="nButton">28sp</dimen>
+    <!--large-->
+    <dimen name="lTitle">40sp</dimen>
+    <dimen name="lSubTitle">35sp</dimen>
+    <dimen name="lButton">31sp</dimen>
+    <!--xlarge-->
+    <dimen name="xlTitle">42sp</dimen>
+    <dimen name="xlSubTitle">38sp</dimen>
+    <dimen name="xlButton">35sp</dimen>
+    <!--xxlarge-->
+    <dimen name="xxlTitle">48sp</dimen>
+    <dimen name="xxlSubTitle">43sp</dimen>
+    <dimen name="xxlButton">38sp</dimen>
 </resources>

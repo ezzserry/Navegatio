@@ -29,11 +29,11 @@
         <activity
             android:name=".activities.Base_Activity"
             android:label="@string/title_activity_side_menu"
-            android:screenOrientation="portrait"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.Splash_Activity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="nosensor"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,12 +43,12 @@
         </activity>
         <activity
             android:name=".activities.Sign_up_Activity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|adjustPan" />
         <activity
             android:name=".activities.Sign_in_Activity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|adjustPan" />
         <activity
@@ -66,7 +66,7 @@
 
         <activity
             android:name=".activities.DetailedNews_Activity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
 
         <service
@@ -85,7 +85,7 @@
 
         <activity
             android:name=".activities.TagActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme"></activity>
     </application>
 

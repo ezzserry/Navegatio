@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -44,17 +45,16 @@ public class Sign_in_Activity extends Activity implements View.OnClickListener {
         etPassword = (EditText) findViewById(R.id.password_et);
         etUsername.setTypeface(Constants.getTypeface_Light(this));
         etPassword.setTypeface(Constants.getTypeface_Light(this));
-        etUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(this,false,true,false));
-        etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(this,false,true,false));
-
+//        etUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+//        etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
 
 
         tvSign_in = (TextView) findViewById(R.id.signin_tv);
         tvSign_in.setTypeface(Constants.getTypeface_Medium(this));
-        tvSign_in.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(this,true,false,false));
+//        tvSign_in.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, true, false, false));
 
         btn_signin = (Button) findViewById(R.id.signin_btn);
-        tvSign_in.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(this,false,false,true));
+//        tvSign_in.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, false, true));
 
         btn_signin.setOnClickListener(this);
     }
@@ -90,8 +90,10 @@ public class Sign_in_Activity extends Activity implements View.OnClickListener {
                         editor.apply();
                         Toast.makeText(getApplicationContext(), "Login succeeded", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Sign_in_Activity.this, Base_Activity.class);
+                        ActivityCompat.finishAffinity(Sign_in_Activity.this);
                         startActivity(intent);
                         finish();
+
                     } else {
                         Toast.makeText(getApplicationContext(), response.getString("error"), Toast.LENGTH_LONG).show();
 
