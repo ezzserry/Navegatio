@@ -47,9 +47,9 @@ public class Feedback_Fragment extends Fragment implements View.OnClickListener 
 
     private void initViews() {
         etFeedback = (EditText) view.findViewById(R.id.feedback_et);
-//        etFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, true, false));
         btnSendFeedback = (Button) view.findViewById(R.id.feedback_btn);
         btnSendFeedback.setOnClickListener(this);
+//        etFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, true, false));
 //        btnSendFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, false, true));
 
     }
