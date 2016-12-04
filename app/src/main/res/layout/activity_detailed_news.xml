@@ -67,14 +67,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ProgressBar
-                    android:id="@+id/page_pb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:visibility="visible" />
-
                 <LinearLayout
                     android:id="@+id/page_ll"
                     android:layout_width="match_parent"
@@ -159,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/menu_categroies"
-                        android:background="@color/com_facebook_blue" />
+                        android:background="@color/colorPrimary" />
 
                     <LinearLayout
                         android:id="@+id/tags_ll"
@@ -261,6 +253,14 @@
                             android:indeterminateTintMode="src_atop" />
                     </FrameLayout>
                 </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/page_pb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="visible" />
             </FrameLayout>
 
 

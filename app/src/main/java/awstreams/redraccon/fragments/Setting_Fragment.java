@@ -80,7 +80,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
 
         tvUsername = (TextView) view.findViewById(R.id.profile_username_tv);
         tvUsername.setTypeface(Constants.getTypeface_Medium(getActivity()));
-        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), false, true, false));
+        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getActivity(), true, false, false));
 
         tvNotificationsTitle = (TextView) view.findViewById(R.id.notifications_tv);
         tvNotificationsTitle.setTypeface(Constants.getTypeface_Medium(getActivity()));
