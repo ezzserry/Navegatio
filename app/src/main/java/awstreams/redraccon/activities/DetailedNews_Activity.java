@@ -41,6 +41,11 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
 import com.google.gson.Gson;
@@ -78,7 +83,6 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     private Tags hashTags;
     private TextView[] myTextViews;
     private boolean isNotifications;
-    private SharedPreferences sharedPreferences;
     private boolean isLoading;
     private WebView mWebviewPop;
     private FrameLayout mContainer;
@@ -87,6 +91,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     // on page load.
     private static final int NUMBER_OF_COMMENTS = 5;
     private String sPreviousPost, sNextPost;
+
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
 
@@ -132,12 +138,13 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
                                     @Override
                                     public void onError() {
-                                        pbPost_img.setVisibility(View.GONE);
                                         ivPostimage.setVisibility(View.VISIBLE);
+                                        pbPost_img.setVisibility(View.GONE);
                                         ivPostimage.setImageResource(R.mipmap.placeholder);
 
                                     }
                                 });
+
                         webView.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>" + post.getString("content"), "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
                         pbContent.setVisibility(View.GONE);

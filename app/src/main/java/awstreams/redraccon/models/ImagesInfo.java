@@ -12,6 +12,12 @@ public class ImagesInfo implements Serializable {
     @SerializedName("url")
     private String url;
 
+    public ImagesInfo(String url, String height, String width) {
+        this.url = url;
+        this.height = height;
+        this.width = width;
+    }
+
     public String getUrl() {
         return url;
     }

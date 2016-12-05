@@ -1,6 +1,8 @@
 package awstreams.redraccon.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +22,11 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -38,6 +45,7 @@ import awstreams.redraccon.adapters.NewslistAdapter;
 import awstreams.redraccon.databases.CategoryModel;
 import awstreams.redraccon.databases.HomePostsModel;
 import awstreams.redraccon.databases.HomePostsModel_Table;
+import awstreams.redraccon.databases.ImageModel;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
@@ -45,6 +53,8 @@ import awstreams.redraccon.helpers.Utils;
 import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
 import awstreams.redraccon.models.Category;
 import awstreams.redraccon.models.NewsItem;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by LENOVO on 05/09/2016.
@@ -66,6 +76,9 @@ public class Home_Fragment extends Fragment {
     private TextView tvTitle, tvDescription;
     private NewsItem newsItem;
     private FrameLayout topContainer;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     public Home_Fragment(String category_id, String query) {
         this.sCategory_id = category_id;
@@ -268,42 +281,113 @@ public class Home_Fragment extends Fragment {
 
     private void updateTopPost(final List<NewsItem> firstList) {
         newsItem = firstList.get(0);
+        String imgUrl;
         try {
-
-            String imgUrl = newsItem.getImages().getFull().getUrl();
-            final FrameLayout.LayoutParams lprams = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    Integer.parseInt(newsItem.getImages().getFull().getHeight()));
-            //Download image using picasso
-            if (imgUrl != null) {
-                Picasso.with(getActivity())
+            cd = new ConnectionDetector(getActivity());
+            isInternetPresent = cd.isConnectingToInternet();
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            editor = sharedPreferences.edit();
+            if (!isInternetPresent) {
+                final FrameLayout.LayoutParams lprams = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        350);
+                imgUrl = sharedPreferences.getString("key_post", null);
+                Glide.with(getApplicationContext())
                         .load(imgUrl)
-                        .into(topImage, new com.squareup.picasso.Callback() {
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .fitCenter()
+                        .listener(new RequestListener<String, GlideDrawable>() {
                             @Override
-                            public void onSuccess() {
-                                topImage.setVisibility(View.VISIBLE);
-                                topProgressBar.setVisibility(View.GONE);
-                                topImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                                topImage.setLayoutParams(lprams);
-                            }
-
-                            @Override
-                            public void onError() {
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                                 topProgressBar.setVisibility(View.GONE);
                                 topImage.setVisibility(View.VISIBLE);
                                 topImage.setImageResource(R.mipmap.placeholder);
                                 topImage.setLayoutParams(lprams);
-
+                                return false;
                             }
-                        });
-            } else {
-                topProgressBar.setVisibility(View.GONE);
-                topImage.setVisibility(View.VISIBLE);
-                topImage.setImageResource(R.mipmap.placeholder);
-                topImage.setLayoutParams(lprams);
 
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                topImage.setVisibility(View.VISIBLE);
+                                topProgressBar.setVisibility(View.GONE);
+                                topImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                topImage.setLayoutParams(lprams);
+                                return false;
+                            }
+                        })
+                        .into(topImage);
+            } else {
+
+
+                imgUrl = newsItem.getImages().getFull().getUrl();
+
+                editor.putString("key_post", imgUrl);
+                editor.apply();
+
+                ImageModel imageModel = null;
+                imageModel = new ImageModel(imgUrl, String.valueOf(ViewGroup.LayoutParams.MATCH_PARENT), newsItem.getImages().getFull().getHeight(),false);
+                imageModel.save();
+
+                final FrameLayout.LayoutParams lprams = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        Integer.parseInt(newsItem.getImages().getFull().getHeight()));
+                //Download image using picasso
+                if (imgUrl != null) {
+//                Picasso.with(getActivity())
+//                        .load(imgUrl)
+//                        .into(topImage, new com.squareup.picasso.Callback() {
+//                            @Override
+//                            public void onSuccess() {
+//                                topImage.setVisibility(View.VISIBLE);
+//                                topProgressBar.setVisibility(View.GONE);
+//                                topImage.setScaleType(ImageView.ScaleType.FIT_XY);
+//                                topImage.setLayoutParams(lprams);
+//                            }
+//
+//                            @Override
+//                            public void onError() {
+//                                topProgressBar.setVisibility(View.GONE);
+//                                topImage.setVisibility(View.VISIBLE);
+//                                topImage.setImageResource(R.mipmap.placeholder);
+//                                topImage.setLayoutParams(lprams);
+//
+//                            }
+//                        });
+
+                    Glide.with(getApplicationContext())
+                            .load(imgUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .fitCenter()
+                            .listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    topProgressBar.setVisibility(View.GONE);
+                                    topImage.setVisibility(View.VISIBLE);
+                                    topImage.setImageResource(R.mipmap.placeholder);
+                                    topImage.setLayoutParams(lprams);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    topImage.setVisibility(View.VISIBLE);
+                                    topProgressBar.setVisibility(View.GONE);
+                                    topImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    topImage.setLayoutParams(lprams);
+                                    return false;
+                                }
+                            })
+                            .into(topImage);
+                } else {
+                    topProgressBar.setVisibility(View.GONE);
+                    topImage.setVisibility(View.VISIBLE);
+                    topImage.setImageResource(R.mipmap.placeholder);
+                    topImage.setLayoutParams(lprams);
+
+                }
             }
         } catch (NullPointerException error) {
+
             topProgressBar.setVisibility(View.GONE);
             topImage.setVisibility(View.VISIBLE);
             topImage.setImageResource(R.mipmap.placeholder);
