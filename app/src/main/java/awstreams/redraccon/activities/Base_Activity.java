@@ -53,12 +53,12 @@ import awstreams.redraccon.helpers.MyApplication;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
 import awstreams.redraccon.interfaces.OnCategoryClickListener;
-import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
+import awstreams.redraccon.interfaces.OnNewsItemClickListener;
 import awstreams.redraccon.models.Category;
 import awstreams.redraccon.models.NewsItem;
 
 public class Base_Activity extends AppCompatActivity
-        implements OnNewsItemClickLitener, OnCategoryClickListener, View.OnClickListener {
+        implements OnNewsItemClickListener, OnCategoryClickListener, View.OnClickListener {
 
     private String Bold = "bold";
     private String Light = "light";
@@ -259,7 +259,7 @@ public class Base_Activity extends AppCompatActivity
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
         if (isInternetPresent) {
-            String id = newsItem.getSlug();
+            String id = newsItem.getId();
             Intent intent = new Intent(this, DetailedNews_Activity.class);
             intent.putExtra(getResources().getString(R.string.post_intent_key), id);
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

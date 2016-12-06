@@ -42,22 +42,22 @@ import java.util.List;
 
 import awstreams.redraccon.R;
 import awstreams.redraccon.adapters.NewslistAdapter;
-import awstreams.redraccon.databases.CategoryModel;
 import awstreams.redraccon.databases.HomePostsModel;
 import awstreams.redraccon.databases.HomePostsModel_Table;
 import awstreams.redraccon.databases.ImageModel;
+import awstreams.redraccon.databases.ImageModel_Table;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
-import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
-import awstreams.redraccon.models.Category;
+import awstreams.redraccon.interfaces.OnNewsItemClickListener;
+import awstreams.redraccon.models.ImagesInfo;
 import awstreams.redraccon.models.NewsItem;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
- * Created by LENOVO on 05/09/2016.
+ * Created by Serry on 05/09/2016.
  */
 public class Home_Fragment extends Fragment {
     private View view;
@@ -76,9 +76,9 @@ public class Home_Fragment extends Fragment {
     private TextView tvTitle, tvDescription;
     private NewsItem newsItem;
     private FrameLayout topContainer;
+    private FrameLayout.LayoutParams lParams;
+    private int imgHeight;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     public Home_Fragment(String category_id, String query) {
         this.sCategory_id = category_id;
@@ -87,7 +87,6 @@ public class Home_Fragment extends Fragment {
 
     public Home_Fragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -175,31 +174,11 @@ public class Home_Fragment extends Fragment {
                                 postItemsList = Arrays.asList(gson.fromJson(jsonArray.toString(), NewsItem[].class));
                                 for (NewsItem newsItem : postItemsList) {
                                     HomePostsModel postsModel = null;
-//                                    String imgUrlFull = null;
-//                                    String imgUrlThumbnail = null;
-//                                    try {
-//                                    imgUrlFull = newsItem.getImages().getFull().getUrl();
-//                                    imgUrlThumbnail = newsItem.getThumbnail();
-//                                        if (imgUrlFull != null && imgUrlThumbnail != null)
                                     postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), sCategory_id);
-//                                    }
-//                                    catch (NullPointerException e) {
-//
-//                                        if (imgUrlFull == null && imgUrlThumbnail != null)
-//                                            postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), newsItem.getThumbnail(), null, sCategory_id);
-//                                        else if (imgUrlFull != null && imgUrlThumbnail == null)
-//                                            postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), null, newsItem.getImages().getFull().getUrl(), sCategory_id);
-//                                        else if (imgUrlFull == null && imgUrlThumbnail == null)
-//                                            postsModel = new HomePostsModel(newsItem.getId(), newsItem.getSlug(), newsItem.getTitle(), newsItem.getExcerpt(), null, null, sCategory_id);
-//                                    }
                                     postsModel.save();
                                 }
                                 split(postItemsList);
-//                                final List<NewsItem> firstList = postItemsList.subList(0, 1);
-//                                updateTopPost(firstList);
-//
-//                                List<NewsItem> secondList = postItemsList.subList(1, postItemsList.size());
-//                                updateUI(secondList);
+
                                 progressBar.setVisibility(View.GONE);
                                 mRecyclerView.setVisibility(View.VISIBLE);
                             }
@@ -209,7 +188,7 @@ public class Home_Fragment extends Fragment {
                             e.printStackTrace();
                             progressBar.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
-                            if (bRefresh == true)
+                            if (bRefresh )
                                 swipeRefreshLayout.setRefreshing(false);
                             allProgressBar.setVisibility(View.GONE);
                             fragmentLinearLayout.setVisibility(View.VISIBLE);
@@ -221,7 +200,7 @@ public class Home_Fragment extends Fragment {
                         Toast.makeText(getActivity(), "connection error ", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
-                        if (bRefresh == true)
+                        if (bRefresh )
                             swipeRefreshLayout.setRefreshing(false);
                         allProgressBar.setVisibility(View.GONE);
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
@@ -282,16 +261,19 @@ public class Home_Fragment extends Fragment {
     private void updateTopPost(final List<NewsItem> firstList) {
         newsItem = firstList.get(0);
         String imgUrl;
+        ImageModel imageModel;
         try {
             cd = new ConnectionDetector(getActivity());
             isInternetPresent = cd.isConnectingToInternet();
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            editor = sharedPreferences.edit();
+
             if (!isInternetPresent) {
+                ImageModel imageModels = (ImageModel) SQLite.select().from(ImageModel.class).where(ImageModel_Table.imgUrl.eq(newsItem.getImages().getFull().getUrl())).queryList();
+                ImagesInfo imgInfo = imageModels.getImage();
+
                 final FrameLayout.LayoutParams lprams = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        350);
-                imgUrl = sharedPreferences.getString("key_post", null);
+                        Integer.parseInt(imgInfo.getHeight()));
+                imgUrl = imgInfo.getUrl();
                 Glide.with(getApplicationContext())
                         .load(imgUrl)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -302,7 +284,6 @@ public class Home_Fragment extends Fragment {
                                 topProgressBar.setVisibility(View.GONE);
                                 topImage.setVisibility(View.VISIBLE);
                                 topImage.setImageResource(R.mipmap.placeholder);
-                                topImage.setLayoutParams(lprams);
                                 return false;
                             }
 
@@ -312,77 +293,88 @@ public class Home_Fragment extends Fragment {
                                 topProgressBar.setVisibility(View.GONE);
                                 topImage.setScaleType(ImageView.ScaleType.FIT_XY);
                                 topImage.setLayoutParams(lprams);
-                                return false;
+                                return true;
                             }
                         })
                         .into(topImage);
             } else {
-
-
                 imgUrl = newsItem.getImages().getFull().getUrl();
-
-                editor.putString("key_post", imgUrl);
-                editor.apply();
-
-                ImageModel imageModel = null;
-                imageModel = new ImageModel(imgUrl, String.valueOf(ViewGroup.LayoutParams.MATCH_PARENT), newsItem.getImages().getFull().getHeight(),false);
+                imageModel = new ImageModel(imgUrl, String.valueOf(ViewGroup.LayoutParams.MATCH_PARENT), newsItem.getImages().getFull().getHeight());
                 imageModel.save();
 
-                final FrameLayout.LayoutParams lprams = new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        Integer.parseInt(newsItem.getImages().getFull().getHeight()));
+
                 //Download image using picasso
                 if (imgUrl != null) {
-//                Picasso.with(getActivity())
-//                        .load(imgUrl)
-//                        .into(topImage, new com.squareup.picasso.Callback() {
-//                            @Override
-//                            public void onSuccess() {
-//                                topImage.setVisibility(View.VISIBLE);
-//                                topProgressBar.setVisibility(View.GONE);
-//                                topImage.setScaleType(ImageView.ScaleType.FIT_XY);
-//                                topImage.setLayoutParams(lprams);
-//                            }
-//
-//                            @Override
-//                            public void onError() {
-//                                topProgressBar.setVisibility(View.GONE);
-//                                topImage.setVisibility(View.VISIBLE);
-//                                topImage.setImageResource(R.mipmap.placeholder);
-//                                topImage.setLayoutParams(lprams);
-//
-//                            }
-//                        });
-
-                    Glide.with(getApplicationContext())
+                    Picasso.with(getActivity())
                             .load(imgUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .fitCenter()
-                            .listener(new RequestListener<String, GlideDrawable>() {
+                            .into(topImage, new com.squareup.picasso.Callback() {
                                 @Override
-                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    topProgressBar.setVisibility(View.GONE);
-                                    topImage.setVisibility(View.VISIBLE);
-                                    topImage.setImageResource(R.mipmap.placeholder);
-                                    topImage.setLayoutParams(lprams);
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                public void onSuccess() {
+                                    if (Integer.parseInt(newsItem.getImages().getFull().getHeight()) >= getResources().getDimension(R.dimen.img_large_height)) {
+                                        imgHeight = (int) getResources().getDimension(R.dimen.img_large_height);
+                                    } else
+                                        imgHeight = Integer.parseInt(newsItem.getImages().getFull().getHeight());
+                                    lParams = new FrameLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            imgHeight);
                                     topImage.setVisibility(View.VISIBLE);
                                     topProgressBar.setVisibility(View.GONE);
                                     topImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                                    topImage.setLayoutParams(lprams);
-                                    return false;
+                                    topImage.setLayoutParams(lParams);
                                 }
-                            })
-                            .into(topImage);
+
+                                @Override
+                                public void onError() {
+                                    lParams = new FrameLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    topProgressBar.setVisibility(View.GONE);
+                                    topImage.setVisibility(View.VISIBLE);
+                                    topImage.setImageResource(R.mipmap.placeholder);
+                                    topImage.setLayoutParams(lParams);
+                                    tvTitle.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                                    tvDescription.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                                }
+                            });
+
+//                    Glide.with(getApplicationContext())
+//                            .load(imgUrl)
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                            .fitCenter()
+//                            .listener(new RequestListener<String, GlideDrawable>() {
+//                                @Override
+//                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                                    lParams = new FrameLayout.LayoutParams(
+//                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+//                                            ViewGroup.LayoutParams.WRAP_CONTENT);
+//                                    topProgressBar.setVisibility(View.GONE);
+//                                    topImage.setVisibility(View.VISIBLE);
+//                                    topImage.setImageResource(R.mipmap.placeholder);
+//                                    topImage.setLayoutParams(lParams);
+//                                    tvTitle.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+//                                    tvDescription.setTextColor(getResources().getColor(R.color.colorPrimary));
+//                                    return false;
+//                                }
+//
+//                                @Override
+//                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                                    lParams = new FrameLayout.LayoutParams(
+//                                            ViewGroup.LayoutParams.MATCH_PARENT,
+//                                            Integer.parseInt(newsItem.getImages().getFull().getHeight()));
+//                                    topImage.setVisibility(View.VISIBLE);
+//                                    topProgressBar.setVisibility(View.GONE);
+//                                    topImage.setScaleType(ImageView.ScaleType.FIT_XY);
+//                                    topImage.setLayoutParams(lParams);
+//                                    return false;
+//                                }
+//                            })
+//                            .into(topImage);
                 } else {
                     topProgressBar.setVisibility(View.GONE);
                     topImage.setVisibility(View.VISIBLE);
                     topImage.setImageResource(R.mipmap.placeholder);
-                    topImage.setLayoutParams(lprams);
+                    topImage.setLayoutParams(lParams);
 
                 }
             }
@@ -395,7 +387,7 @@ public class Home_Fragment extends Fragment {
         //Setting text view title
         tvTitle.setText(Utils.convertHTMLtoString(newsItem.getTitle()));
         tvDescription.setText(Utils.convertHTMLtoString(newsItem.getExcerpt()));
-        final OnNewsItemClickLitener mListener = (OnNewsItemClickLitener) getActivity();
+        final OnNewsItemClickListener mListener = (OnNewsItemClickListener) getActivity();
 
         topContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -414,7 +406,7 @@ public class Home_Fragment extends Fragment {
         newslistAdapter = new NewslistAdapter(getActivity(), secondList);
         mRecyclerView.setAdapter(newslistAdapter);
         newslistAdapter.notifyDataSetChanged();
-        if (bRefresh == true)
+        if (bRefresh )
             swipeRefreshLayout.setRefreshing(false);
 
     }

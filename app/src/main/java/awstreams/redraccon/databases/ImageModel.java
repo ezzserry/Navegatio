@@ -19,11 +19,10 @@ public class ImageModel extends BaseModel {
 
     }
 
-    public ImageModel(String imgUrl, String imgWidth, String imgHeight,Boolean isThumbnail) {
+    public ImageModel(String imgUrl, String imgWidth, String imgHeight) {
         this.imgUrl = imgUrl;
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
-        this.isThumbnail = isThumbnail;
     }
 
     @PrimaryKey
@@ -41,9 +40,11 @@ public class ImageModel extends BaseModel {
     Boolean isThumbnail;
 
 
+
     public ImagesInfo getImage() {
         return new ImagesInfo(imgUrl, imgWidth, imgWidth);
     }
+
 
 
 }

@@ -1,5 +1,7 @@
 package awstreams.redraccon.models;
 
+import android.media.Image;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -149,16 +151,6 @@ public class NewsItem implements Serializable {
         this.comments = comments;
     }
 
-//    @SerializedName("attachments")
-//    private ArrayList<Attachments> attachments;
-//
-//    public ArrayList<Attachments> getAttachments() {
-//        return attachments;
-//    }
-//
-//    public void setAttachments(ArrayList<Attachments> attachments) {
-//        this.attachments = attachments;
-//    }
 
     @SerializedName("comment_count")
     private String comment_count;

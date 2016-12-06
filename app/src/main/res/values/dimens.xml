@@ -14,7 +14,7 @@
     <dimen name="img_thumbnail_height">150dp</dimen>
     <dimen name="img_thumbnail_width">150dp</dimen>
     <dimen name="img_large_width">675dp</dimen>
-    <dimen name="img_large_height">482dp</dimen>
+    <dimen name="img_large_height">400dp</dimen>
     <dimen name="img_author">90dp</dimen>
 
     <!--custom text sizes-->

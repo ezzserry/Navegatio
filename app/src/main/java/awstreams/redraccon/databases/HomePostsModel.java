@@ -1,11 +1,14 @@
 package awstreams.redraccon.databases;
 
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.ModelCacheField;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import awstreams.redraccon.models.Images;
 import awstreams.redraccon.models.NewsItem;
 
 /**
@@ -17,15 +20,13 @@ public class HomePostsModel extends BaseModel {
     public HomePostsModel() {
     }
 
-    public HomePostsModel(String id, String slug, String title, String subtitle,  String category_id) {
+    public HomePostsModel(String id, String slug, String title, String subtitle, String category_id) {
         this.id = id;
         this.slug = slug;
         this.title = title;
         this.subtitle = subtitle;
-//        this.post_imageThumbnail = post_imageThumbnail;
-//        this.post_imageFull = post_imageFull;
         this.category_id = category_id;
-
+//        this.images = images;
     }
 
     @PrimaryKey
@@ -46,11 +47,9 @@ public class HomePostsModel extends BaseModel {
     @Column
     private String category_id;
 
-    @Column
-    private String post_imageThumbnail;
-
-    @Column
-    private String post_imageFull;
+//    @Column
+//    @ForeignKey
+//    private Images images;
 
     public String getId() {
         return id;
@@ -92,22 +91,13 @@ public class HomePostsModel extends BaseModel {
         this.category_id = category_id;
     }
 
-    public String getPost_imageThumbnail() {
-        return post_imageThumbnail;
-    }
-
-    public void setPost_imageThumbnail(String post_imageThumbnail) {
-        this.post_imageThumbnail = post_imageThumbnail;
-    }
-
-    public String getPost_imageFull() {
-        return post_imageFull;
-    }
-
-    public void setPost_imageFull(String post_imageFull) {
-        this.post_imageFull = post_imageFull;
-    }
-
+//    public Images getImages() {
+//        return images;
+//    }
+//
+//    public void setImages(Images images) {
+//        this.images = images;
+//    }
 
     public NewsItem getNewsItem() {
         return new NewsItem(id, slug, title, subtitle);

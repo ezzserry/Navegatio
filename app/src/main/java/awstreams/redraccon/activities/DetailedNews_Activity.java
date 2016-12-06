@@ -66,6 +66,8 @@ import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
 import awstreams.redraccon.models.Tags;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class DetailedNews_Activity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tvTitle, tvExcerpt, tvName, tvDescription, tvComments_title;
@@ -95,6 +97,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private FrameLayout.LayoutParams lParams;
+    private int imgHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,25 +129,62 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                 try {
                     if (response.getString("status").equals("ok")) {
                         JSONObject post = response.getJSONObject("post");
-                        Picasso.with(getApplicationContext())
+                        imgHeight = Integer.parseInt(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("height"));
+//                        Picasso.with(getApplicationContext())
+//                                .load(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"))
+//                                .into(ivPostimage, new com.squareup.picasso.Callback() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                        ivPostimage.setVisibility(View.VISIBLE);
+//                                        pbPost_img.setVisibility(View.GONE);
+//                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
+//                                        ivPostimage.setLayoutParams(lParams);
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError() {
+//                                        ivPostimage.setVisibility(View.VISIBLE);
+//                                        pbPost_img.setVisibility(View.GONE);
+//                                        ivPostimage.setImageResource(R.mipmap.placeholder);
+//
+//                                    }
+//                                });
+                        Glide.with(getApplicationContext())
                                 .load(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"))
-                                .into(ivPostimage, new com.squareup.picasso.Callback() {
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .fitCenter()
+                                .listener(new RequestListener<String, GlideDrawable>() {
                                     @Override
-                                    public void onSuccess() {
-                                        ivPostimage.setVisibility(View.VISIBLE);
+                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        lParams = new FrameLayout.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT);
                                         pbPost_img.setVisibility(View.GONE);
-                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
-
-                                    }
-
-                                    @Override
-                                    public void onError() {
                                         ivPostimage.setVisibility(View.VISIBLE);
-                                        pbPost_img.setVisibility(View.GONE);
                                         ivPostimage.setImageResource(R.mipmap.placeholder);
+                                        ivPostimage.setLayoutParams(lParams);
 
+                                        return false;
                                     }
-                                });
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                        if (imgHeight >= getResources().getDimension(R.dimen.img_large_height)) {
+                                            imgHeight = (int) getResources().getDimension(R.dimen.img_large_height);
+                                        }
+                                        lParams = new FrameLayout.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                imgHeight);
+                                        pbPost_img.setVisibility(View.GONE);
+                                        ivPostimage.setVisibility(View.VISIBLE);
+                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                        ivPostimage.setLayoutParams(lParams);
+                                        return false;
+                                    }
+                                })
+                                .into(ivPostimage);
 
                         webView.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>" + post.getString("content"), "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
@@ -333,20 +374,6 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         toolbarTextAppearance();
         collapsingToolbarLayout.setTitle("");
     }
-
-//    private void dynamicToolbarColor() {
-//        ivPostimage.buildDrawingCache();
-//        Bitmap bitmap = ivPostimage.getDrawingCache();
-//
-//        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-//
-//            @Override
-//            public void onGenerated(Palette palette) {
-//                collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(R.attr.colorPrimary));
-//                collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(R.attr.colorPrimaryDark));
-//            }
-//        });
-//    }
 
     private void toolbarTextAppearance() {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
