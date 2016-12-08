@@ -54,6 +54,7 @@ public class Constants {
     public static final String User_NAME = "username";
     public static final String defaultTextSize = "default";
     public static final String fbAccessToken = "token";
+    public static final String categoryID_Key = "categID";
 
     ///////Notifications////////////
     public static final String ifNotifications = "notifications";

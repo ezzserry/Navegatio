@@ -11,10 +11,12 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,9 +38,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -52,6 +56,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
+import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,6 +69,7 @@ import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
+import awstreams.redraccon.models.Category;
 import awstreams.redraccon.models.Tags;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -73,7 +79,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     private TextView tvTitle, tvExcerpt, tvName, tvDescription, tvComments_title;
     private ImageView ivPostimage, ivAuthorimage;
     private ProgressBar pbContent, pbPageContent, pbPost_img, pbAuthorimg, pbComments;
-    private LinearLayout llPage_content, llTags;
+    private LinearLayout llPage_content;
+    private FlowLayout llTags;
     private WebView webView, webView_facebookComments;
     private String ShareURL;
     private ShareButton btnShareFb;
@@ -99,6 +106,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
     private FrameLayout.LayoutParams lParams;
     private int imgHeight;
+    private String postID;
+    private LinearLayout rlTagsContainer, newRowofTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +120,11 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         Bundle bundle = intent.getExtras();
 
         if (bundle != null) {
-            String id = bundle.getString(getResources().getString(R.string.post_intent_key));
+            postID = bundle.getString(getResources().getString(R.string.post_intent_key));
             cd = new ConnectionDetector(this);
             isInternetPresent = cd.isConnectingToInternet();
             if (isInternetPresent) {
-                setPost(id);
+                setPost(postID);
 
             } else
                 Snackbar.make(llPage_content, "no internet connection ", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -186,12 +195,44 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                 })
                                 .into(ivPostimage);
 
-                        webView.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>" + post.getString("content"), "text/html", "UTF-8", null);
+                        webView.loadDataWithBaseURL(null, "<head>\n" +
+                                "\n" +
+                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/themes/onfleek/style.css' type='text/css' media='all' />\n" +
+                                "\n" +
+                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
+                                "\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/jquery/jquery.js'></script>\n" +
+                                "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js'></script>\n" +
+                                "</head>\n" +
+                                "<body class=\"lazy-wrapper\"><style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style> " + post.getString("content")+"" +
+                                "<script>\n" +
+                                "jQuery(function($) {\n" +
+                                "    $(\"img.lazy\").each(function() {\n" +
+                                "\n" +
+                                "    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n" +
+                                "    \n" +
+                                "}); \n" +
+                                "\n" +
+                                "});\n" +
+                                "</script>\n" +
+                                "\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js'></script>\n" +
+                                "<script type='text/javascript'>\n" +
+                                "/* <![CDATA[ */\n" +
+                                "var options = {\"animationTransition\":{\"is_page_transition\":\"no\",\"preloader_bg_color\":\"#ffffff\",\"animation_transition\":\"fade-in\",\"preloader_style\":\"none\",\"css_animation\":{\"loader_style\":\"style-2\",\"loader_color\":\"#e2e2e2\"},\"image\":{\"loader_image\":\"\"}},\"is_lazy_loading\":\"yes\",\"isStickySidebar\":\"yes\",\"isBackToTopButton\":\"yes\",\"pagination\":{\"currentPage\":\"\",\"link\":\"http:\\/\\/redracc.com\\/egyptian-currency-designs\",\"totalPages\":0,\"format\":\"\",\"ajaxurl\":\"http:\\/\\/redracc.com\\/wp-admin\\/admin-ajax.php\",\"postID\":2440},\"stickyLogo\":\"http:\\/\\/redracc.com\\/wp-content\\/uploads\\/2016\\/08\\/logo-text.png\",\"site_url\":\"http:\\/\\/redracc.com\",\"isMobile\":\"no\",\"isStickyHeader\":\"yes\",\"isStickyShare\":\"yes\",\"isFeatureImageLightbox\":\"no\",\"isEnableSideArea\":\"yes\"};\n" +
+                                "/* ]]> */\n" +
+                                "</script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/navigation.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/wp-embed.min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js'></script>\n" +
+                                "</body>", "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
                         pbContent.setVisibility(View.GONE);
                         pbPageContent.setVisibility(View.GONE);
                         llPage_content.setVisibility(View.VISIBLE);
-//                      tvTitle.setText(post.getString("title"));
+                        tvTitle.setText(Utils.convertHTMLtoString(post.getString("title")));
                         tvExcerpt.setText(Utils.convertHTMLtoString(post.getString("excerpt")));
                         tvName.setText("Author Name: " + post.getJSONObject("author").getString("name"));
                         tvDescription.setText("Nickname: " + post.getJSONObject("author").getString("nickname"));
@@ -218,8 +259,11 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                     }
                                 });
                         ShareURL = post.getString("url");
-                        JSONArray tagsArray = post.getJSONArray("tags");
+
                         Gson gson = new GsonBuilder().serializeNulls().create();
+
+
+                        JSONArray tagsArray = post.getJSONArray("tags");
                         tagsList = Arrays.asList(gson.fromJson(tagsArray.toString(), Tags[].class));
                         updateTags(tagsList);
                         try {
@@ -257,7 +301,18 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                String json = null;
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.data != null) {
+                    switch (response.statusCode) {
+                        case 404:
+                            json = new String(response.data);
+                            json = trimMessage(json, "error");
+                            if (json != null) displayMessage(json);
+                            finish();
+                            break;
+                    }
+                }
             }
         });
     }
@@ -266,6 +321,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         LinearLayout.LayoutParams lprams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
+
         final int noTextviews = tagsList.size();
         myTextViews = new TextView[noTextviews];
         for (int i = 0; i < noTextviews; i++) {
@@ -275,11 +331,18 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             hashTags.setTitle(tagsList.get(i).getTitle());
             hashTags = tagsList.get(i);
             TextView tvTag = new TextView(this);
-            tvTag.setText(hashTags.getTitle() + ",");
+            tvTag.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            if (i != noTextviews-1)
+                tvTag.setText(hashTags.getTitle() + ", ");
+            else
+                tvTag.setText(hashTags.getTitle()+".");
             tvTag.setLayoutParams(lprams);
             tvTag.setId(Integer.parseInt(hashTags.getId()));
             tvTag.setTypeface(Constants.getTypeface_Medium(this));
             tvTag.setGravity(Gravity.CENTER);
+
 
             tvTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(getApplicationContext(), false, true, false));
             lprams.setMargins(5, 0, 5, 0);
@@ -302,6 +365,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     }
 
     private void initViews() {
+        rlTagsContainer = (LinearLayout) findViewById(R.id.tags_container_rl);
+
         btnPreviousPost = (Button) findViewById(R.id.previous_post_ib);
         btnPreviousPost.setOnClickListener(this);
         btnPreviousPost.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, false, true));
@@ -343,7 +408,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
 
         llPage_content = (LinearLayout) findViewById(R.id.page_ll);
-        llTags = (LinearLayout) findViewById(R.id.tags_ll);
+        llTags = (FlowLayout) findViewById(R.id.tags_ll);
 
 
         tvTitle.setTypeface(Constants.getTypeface_Medium(this));
@@ -421,6 +486,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             Intent intent = new Intent(DetailedNews_Activity.this, Base_Activity.class);
             startActivity(intent);
             finish();
+
+
         } else
             finish();
         super.onBackPressed();
@@ -577,8 +644,28 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             finish();
             startActivity(getIntent());
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+
+    public String trimMessage(String json, String key) {
+        String trimmedString = null;
+
+        try {
+            JSONObject obj = new JSONObject(json);
+            trimmedString = obj.getString(key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return trimmedString;
+    }
+
+    //Somewhere that has access to a context
+    public void displayMessage(String toastString) {
+        Toast.makeText(DetailedNews_Activity.this, toastString, Toast.LENGTH_LONG).show();
+    }
+
 
 }

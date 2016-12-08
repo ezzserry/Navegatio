@@ -27,6 +27,7 @@
     <string name="post_intent_key">postid</string>
     <string name="tagid_intent_key">tagid</string>
     <string name="tagtitle_intent_key">tagtitle</string>
+    <string name="categoryid_intent_key">categid</string>
     <string name="welcome_user">WELCOME</string>
 
     <string name="sign_up_first_name">Username</string>

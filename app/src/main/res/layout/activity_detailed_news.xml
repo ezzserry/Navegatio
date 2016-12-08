@@ -98,7 +98,7 @@
                             android:background="@color/second_white"
                             android:drawableTop="@mipmap/next_btn"
                             android:padding="@dimen/menu_categroies"
-                            android:text="@string/next_post"/>
+                            android:text="@string/next_post" />
 
                     </RelativeLayout>
 
@@ -154,14 +154,21 @@
                         android:background="@color/colorPrimary" />
 
                     <LinearLayout
-                        android:id="@+id/tags_ll"
+                        android:id="@+id/tags_container_rl"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/menu_categroies"
-                        android:gravity="center_vertical|start"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/menu_categroies" />
+                        android:layout_height="wrap_content">
+
+                        <org.apmem.tools.layouts.FlowLayout
+
+                            android:id="@+id/tags_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/menu_categroies"
+                            android:gravity="center_vertical|start"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/menu_categroies" />
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
