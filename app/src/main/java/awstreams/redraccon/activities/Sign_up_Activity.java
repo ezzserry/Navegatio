@@ -260,7 +260,6 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Utils.dismissloading();
-                                int networkResponse = error.networkResponse.statusCode;
                                 String json = null;
                                 NetworkResponse response = error.networkResponse;
                                 if (response != null && response.data != null) {

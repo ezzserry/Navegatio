@@ -1,7 +1,6 @@
 package awstreams.redraccon.activities;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -34,10 +33,10 @@ import awstreams.redraccon.adapters.NewslistAdapter;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
-import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
+import awstreams.redraccon.interfaces.OnNewsItemClickListener;
 import awstreams.redraccon.models.NewsItem;
 
-public class TagActivity extends AppCompatActivity implements OnNewsItemClickLitener {
+public class TagActivity extends AppCompatActivity implements OnNewsItemClickListener {
 
     private TextView tvTagTitle;
     private GridLayoutManager lLayout;
@@ -133,7 +132,7 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLit
                             e.printStackTrace();
                             progressBar.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
-                            if (bRefresh == true)
+                            if (bRefresh )
                                 swipeRefreshLayout.setRefreshing(false);
                         }
                         allProgressBar.setVisibility(View.GONE);
@@ -145,7 +144,7 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLit
                         Toast.makeText(TagActivity.this, "connection error ", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
-                        if (bRefresh == true)
+                        if (bRefresh )
                             swipeRefreshLayout.setRefreshing(false);
                         allProgressBar.setVisibility(View.GONE);
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
@@ -157,7 +156,7 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLit
         newslistAdapter = new NewslistAdapter(TagActivity.this, postItemsList);
         mRecyclerView.setAdapter(newslistAdapter);
         newslistAdapter.notifyDataSetChanged();
-        if (bRefresh == true) swipeRefreshLayout.setRefreshing(false);
+        if (bRefresh) swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

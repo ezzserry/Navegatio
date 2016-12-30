@@ -23,8 +23,7 @@ import java.util.List;
 import awstreams.redraccon.R;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.Utils;
-import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
-import awstreams.redraccon.models.Attachments;
+import awstreams.redraccon.interfaces.OnNewsItemClickListener;
 import awstreams.redraccon.models.NewsItem;
 
 public class NewslistAdapter extends RecyclerView.Adapter<NewslistAdapter.MyCustomViewHolder> {
@@ -34,12 +33,12 @@ public class NewslistAdapter extends RecyclerView.Adapter<NewslistAdapter.MyCust
     private Context context;
 
     private NewsItem newsItem;
-    OnNewsItemClickLitener mListener;
+    OnNewsItemClickListener mListener;
 
     public NewslistAdapter(Context context, List<NewsItem> newsItemList) {
         this.context = context;
         this.newsItemList = newsItemList;
-        mListener = (OnNewsItemClickLitener) context;
+        mListener = (OnNewsItemClickListener) context;
 
     }
 
