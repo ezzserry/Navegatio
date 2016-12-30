@@ -67,7 +67,7 @@
         <activity
             android:name=".activities.DetailedNews_Activity"
             android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".notifications.GCMListener"

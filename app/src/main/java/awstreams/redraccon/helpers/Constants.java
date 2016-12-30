@@ -34,6 +34,7 @@ public class Constants {
     public static final String KEY_Prefs_Nonce = "nonce_key";
     public static final String Ssl = "&insecure=cool";
     public static final String URL_BASE = "http://redracc.com/api-GfjSL8AeXa/";
+    public static final String URL_GET_HOME_POSTS = URL_BASE + "get_home_posts/";
     public static final String URL_GET_NONCE = URL_BASE + "get_nonce/?controller=user&method=register";
     public static final String URL_REGISTER = URL_BASE + "user/register/?nonce=%s&username=%s&display_name=%s&email=%s&user_pass=%s&age=%s" + Ssl;
     public static final String URL_SIGN_IN = URL_BASE + "auth/generate_auth_cookie/?insecure=cool&username=%s&password=%s";
@@ -92,7 +93,7 @@ public class Constants {
                 textSize = (int) context.getResources().getDimension(R.dimen.xxsSubTitle);
             } else if (textSize > 10 && textSize <= 30) {
                 textSize = (int) context.getResources().getDimension(R.dimen.xsSubTitle);
-            } else if (textSize > 30 && textSize <50) {
+            } else if (textSize > 30 && textSize < 50) {
                 textSize = (int) context.getResources().getDimension(R.dimen.sSubTitle);
             } else if (textSize == 50) {
                 textSize = (int) context.getResources().getDimension(R.dimen.nSubTitle);

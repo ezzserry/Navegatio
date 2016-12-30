@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,13 +67,14 @@ public class Base_Activity extends AppCompatActivity
     private Category category;
     private Boolean isInternetPresent = false;
     private ConnectionDetector cd;
-    private TextView tvUsername;
+    private TextView tvUsername, tvHomePosts;
     private LinearLayout rlCategoriesList;
     private TextView tvFeedback, tvRate, tvSetting;
     private OnCategoryClickListener mListener;
     private TextView[] myTextViews;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
+    private ImageView ivHomeLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +112,9 @@ public class Base_Activity extends AppCompatActivity
                     categoryList.add(categoryModel.getCategory());
                 }
                 updateNavigationList(categoryList);
-                onCategoryClick(categoryList.get(0), myTextViews[0]);
+//                onCategoryClick(categoryList.get(0), myTextViews[0]);
+                gethomeposts();
+
             } else
                 Toast.makeText(this, getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
 
@@ -163,7 +167,8 @@ public class Base_Activity extends AppCompatActivity
                             categoryModel.save();
                         }
                         updateNavigationList(categoryList);
-                        onCategoryClick(categoryList.get(0), myTextViews[0]);
+                        gethomeposts();
+//                        onCategoryClick(categoryList.get(0), myTextViews[0]);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -223,7 +228,8 @@ public class Base_Activity extends AppCompatActivity
         NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scrollview);
         rlCategoriesList = (LinearLayout) nestedScrollView.findViewById(R.id.categories_rl);
 
-
+        ivHomeLogo=(ImageView) findViewById(R.id.home_iv);
+        ivHomeLogo.setOnClickListener(this);
         tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
         tvFeedback.setTypeface(Constants.getTypeface_Light(this));
         tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -241,6 +247,12 @@ public class Base_Activity extends AppCompatActivity
         tvUsername = (TextView) findViewById(R.id.profile_username_tv);
         tvUsername.setTypeface(Constants.getTypeface_Light(this));
         tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
+        tvHomePosts = (TextView) findViewById(R.id.home_tv);
+        tvHomePosts.setTypeface(Constants.getTypeface_Light(this));
+        tvHomePosts.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        tvHomePosts.setOnClickListener(this);
+
     }
 
     @Override
@@ -287,7 +299,7 @@ public class Base_Activity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query) {
                 query = txtSearch.getText().toString();
-                Fragment fragment = new Home_Fragment(null, query);
+                Fragment fragment = new Home_Fragment(null, query, false);
                 android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment).commit();
@@ -322,7 +334,7 @@ public class Base_Activity extends AppCompatActivity
         if (id.equals("") || id.equals(null) || id.isEmpty()) {
             id = "62";
         }
-        Fragment fragment = new Home_Fragment(id, null);
+        Fragment fragment = new Home_Fragment(id, null, false);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment).commitAllowingStateLoss();
@@ -361,12 +373,34 @@ public class Base_Activity extends AppCompatActivity
             case R.id.menu_rate_us_tv:
                 rateOnStore();
                 break;
+
+            case R.id.home_tv:
+                gethomeposts();
+                break;
+
+            case R.id.home_iv:
+                gethomeposts();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
 
+    }
+
+    private void gethomeposts() {
+        Fragment fragment = new Home_Fragment(null, null, true);
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment).commitAllowingStateLoss();
+        setMenuFont();
+        setBottomMenuFont();
+        applySelectedCategFont(tvHomePosts, Bold);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     private void setMenuFont() {
@@ -381,6 +415,7 @@ public class Base_Activity extends AppCompatActivity
         applySelectedCategFont(tvRate, Light);
         applySelectedCategFont(tvFeedback, Light);
         applySelectedCategFont(tvSetting, Light);
+        applySelectedCategFont(tvHomePosts, Light);
 
     }
 

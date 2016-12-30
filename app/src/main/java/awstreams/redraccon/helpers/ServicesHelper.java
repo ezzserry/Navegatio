@@ -70,6 +70,17 @@ public class ServicesHelper {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(context).add(request);
     }
+
+    public void getHomePosts(Context context, Response.Listener<JSONObject> success, Response.ErrorListener errorListener){
+        String URL = Constants.URL_GET_HOME_POSTS;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), success, errorListener);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(context).add(request);
+    }
+
     public void getTag(Context context, String id, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
         String URL = Constants.URL_GET_TAG;
         URL = String.format(URL, id);
