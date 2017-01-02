@@ -50,7 +50,7 @@ import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
-import awstreams.redraccon.interfaces.OnNewsItemClickLitener;
+import awstreams.redraccon.interfaces.OnNewsItemClickListener;
 import awstreams.redraccon.models.Category;
 import awstreams.redraccon.models.NewsItem;
 
@@ -383,7 +383,7 @@ public class Home_Fragment extends Fragment {
         //Setting text view title
         tvTitle.setText(Utils.convertHTMLtoString(newsItem.getTitle()));
         tvDescription.setText(Utils.convertHTMLtoString(newsItem.getExcerpt()));
-        final OnNewsItemClickLitener mListener = (OnNewsItemClickLitener) getActivity();
+        final OnNewsItemClickListener mListener = (OnNewsItemClickListener) getActivity();
 
         topContainer.setOnClickListener(new View.OnClickListener() {
             @Override
