@@ -30,7 +30,7 @@
     <string name="categoryid_intent_key">categid</string>
     <string name="welcome_user">WELCOME</string>
 
-    <string name="sign_up_first_name">Username</string>
+    <string name="sign_up_username">Username</string>
     <string name="sign_up_last_name">Last name</string>
     <string name="sign_up_email">Email</string>
     <string name="sign_up_password">Password</string>

@@ -42,7 +42,7 @@
             android:layout_margin="@dimen/menu_categroies"
             android:background="@mipmap/bg_et"
             android:gravity="center"
-            android:hint="@string/sign_up_email"
+            android:hint="@string/sign_up_username"
             android:layout_below="@+id/signin_tv"
             android:inputType="textEmailAddress"
             android:textColor="@color/second_white" />

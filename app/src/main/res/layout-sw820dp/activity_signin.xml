@@ -13,6 +13,7 @@
         android:gravity="top"
         android:padding="@dimen/menu_top"
         android:layout_margin="@dimen/menu_categroies"
+        android:layout_centerHorizontal="true"
         android:background="@mipmap/bg_filter_with_logo">
     <ImageView
         android:id="@+id/logo_iv"
@@ -41,7 +42,7 @@
             android:layout_margin="@dimen/menu_categroies"
             android:background="@mipmap/bg_et"
             android:gravity="center"
-            android:hint="@string/sign_up_email"
+            android:hint="@string/sign_up_username"
             android:layout_below="@+id/signin_tv"
             android:inputType="textEmailAddress"
             android:textColor="@color/second_white" />

@@ -112,13 +112,23 @@ public class Home_Fragment extends Fragment {
             bRefresh = false;
             postItemsList = new ArrayList<>();
             List<HomePostsModel> homePostsModels = SQLite.select().from(HomePostsModel.class).where(HomePostsModel_Table.category_id.eq(sCategory_id)).queryList();
-            if (homePostsModels.size() >= 0) {
+            if (homePostsModels.size() > 0) {
                 for (HomePostsModel homePostsModel : homePostsModels) {
                     postItemsList.add(homePostsModel.getNewsItem());
                 }
                 split(postItemsList);
-            } else
-                Snackbar.make(mRecyclerView, "no internet connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            } else{
+                progressBar.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                if (bRefresh == true)
+                    swipeRefreshLayout.setRefreshing(false);
+                allProgressBar.setVisibility(View.GONE);
+                fragmentLinearLayout.setVisibility(View.VISIBLE);
+                topProgressBar.setVisibility(View.GONE);
+                Toast.makeText(getActivity(),"no internet connection",Toast.LENGTH_LONG).show();
+            }
+//                Snackbar.make(mRecyclerView, "no internet connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
         }
         return view;
     }
@@ -217,6 +227,7 @@ public class Home_Fragment extends Fragment {
                                 swipeRefreshLayout.setRefreshing(false);
                             allProgressBar.setVisibility(View.GONE);
                             fragmentLinearLayout.setVisibility(View.VISIBLE);
+                            topProgressBar.setVisibility(View.GONE);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -229,6 +240,7 @@ public class Home_Fragment extends Fragment {
                             swipeRefreshLayout.setRefreshing(false);
                         allProgressBar.setVisibility(View.GONE);
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
+                        topProgressBar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -322,6 +334,7 @@ public class Home_Fragment extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                     allProgressBar.setVisibility(View.GONE);
                     fragmentLinearLayout.setVisibility(View.VISIBLE);
+                    topProgressBar.setVisibility(View.GONE);
                 }
 
             }
@@ -335,6 +348,7 @@ public class Home_Fragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                 allProgressBar.setVisibility(View.GONE);
                 fragmentLinearLayout.setVisibility(View.VISIBLE);
+                topProgressBar.setVisibility(View.GONE);
             }
         });
     }
