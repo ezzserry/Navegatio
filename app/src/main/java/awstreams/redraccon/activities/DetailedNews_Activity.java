@@ -6,17 +6,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -34,11 +32,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,14 +65,11 @@ import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
-import awstreams.redraccon.models.Category;
 import awstreams.redraccon.models.Tags;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DetailedNews_Activity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView tvTitle, tvExcerpt, tvName, tvDescription, tvComments_title;
+    private TextView tvTitle, tvExcerpt, tvName, tvDescription, tvNickname, tvComments_title;
     private ImageView ivPostimage, ivAuthorimage;
     private ProgressBar pbContent, pbPageContent, pbPost_img, pbAuthorimg, pbComments;
     private LinearLayout llPage_content;
@@ -201,10 +194,14 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                 "\n" +
                                 "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
                                 "\n" +
+                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/css/vc_carousel.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
+                                "\n" +
+                                "\n" +
+                                "\n" +
                                 "<script type='text/javascript' src='http://redracc.com/wp-includes/js/jquery/jquery.js'></script>\n" +
                                 "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js'></script>\n" +
                                 "</head>\n" +
-                                "<body class=\"lazy-wrapper\"><style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style> " + post.getString("content")+"" +
+                                "<body class=\"lazy-wrapper\"><style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style> " + post.getString("content") + "" +
                                 "<script>\n" +
                                 "jQuery(function($) {\n" +
                                 "    $(\"img.lazy\").each(function() {\n" +
@@ -227,6 +224,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                 "<script type='text/javascript' src='http://redracc.com/wp-includes/js/wp-embed.min.js'></script>\n" +
                                 "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js'></script>\n" +
                                 "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/transition.min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/vc_carousel.min.js'></script>\n" +
                                 "</body>", "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
                         pbContent.setVisibility(View.GONE);
@@ -235,7 +234,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                         tvTitle.setText(Utils.convertHTMLtoString(post.getString("title")));
                         tvExcerpt.setText(Utils.convertHTMLtoString(post.getString("excerpt")));
                         tvName.setText("Author Name: " + post.getJSONObject("author").getString("name"));
-                        tvDescription.setText("Nickname: " + post.getJSONObject("author").getString("nickname"));
+                        tvDescription.setText("Description: " + post.getJSONObject("author").getString("description"));
+                        tvNickname.setText("Nick name: " + post.getJSONObject("author").getString("nickname"));
                         collapsingToolbarLayout.setTitle(Utils.convertHTMLtoString(post.getString("title")));
 
                         Picasso.with(getApplicationContext())
@@ -334,10 +334,10 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             tvTag.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
-            if (i != noTextviews-1)
+            if (i != noTextviews - 1)
                 tvTag.setText(hashTags.getTitle() + ", ");
             else
-                tvTag.setText(hashTags.getTitle()+".");
+                tvTag.setText(hashTags.getTitle() + ".");
             tvTag.setLayoutParams(lprams);
             tvTag.setId(Integer.parseInt(hashTags.getId()));
             tvTag.setTypeface(Constants.getTypeface_Medium(this));
@@ -391,6 +391,9 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         tvDescription = (TextView) findViewById(R.id.author_desc_tv);
         tvDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
 
+        tvNickname = (TextView) findViewById(R.id.author_nickname_tv);
+        tvNickname.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, false, true, false));
+
         tvComments_title = (TextView) findViewById(R.id.comment_title_tv);
         tvComments_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, true, false, false));
 
@@ -414,8 +417,9 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         tvTitle.setTypeface(Constants.getTypeface_Medium(this));
         tvExcerpt.setTypeface(Constants.getTypeface_Light(this));
         tvComments_title.setTypeface(Constants.getTypeface_Medium(this));
-        tvName.setTypeface(Constants.getTypeface_Light(this));
+        tvName.setTypeface(Constants.getTypeface_Medium(this));
         tvDescription.setTypeface(Constants.getTypeface_Light(this));
+        tvNickname.setTypeface(Constants.getTypeface_Light(this));
 
         webView = (WebView) findViewById(R.id.webview);
         // Enable Javascript

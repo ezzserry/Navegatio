@@ -9,16 +9,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.SearchView;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,9 +50,7 @@ import awstreams.redraccon.fragments.Home_Fragment;
 import awstreams.redraccon.fragments.Setting_Fragment;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
-import awstreams.redraccon.helpers.MyApplication;
 import awstreams.redraccon.helpers.ServicesHelper;
-import awstreams.redraccon.helpers.Utils;
 import awstreams.redraccon.interfaces.OnCategoryClickListener;
 import awstreams.redraccon.interfaces.OnNewsItemClickListener;
 import awstreams.redraccon.models.Category;
@@ -67,7 +65,7 @@ public class Base_Activity extends AppCompatActivity
     private Category category;
     private Boolean isInternetPresent = false;
     private ConnectionDetector cd;
-    private TextView tvUsername, tvHomePosts;
+    private TextView tvUsername, tvEmail, tvHomePosts;
     private LinearLayout rlCategoriesList;
     private TextView tvFeedback, tvRate, tvSetting;
     private OnCategoryClickListener mListener;
@@ -97,14 +95,18 @@ public class Base_Activity extends AppCompatActivity
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         String username = sharedPrefs.getString(Constants.User_NAME, "");
+        String email = sharedPrefs.getString(Constants.User_EMAIL, "");
         if (isInternetPresent) {
-            if (!username.equals("")) {
+            if (!username.equals("") && !email.equals("")) {
                 tvUsername.setText(username);
+                tvEmail.setText(email);
+
             } else
                 getUserInfo();
             getCategoriesList();
         } else {
             tvUsername.setText(username);
+            tvEmail.setText(email);
             categoryList = new ArrayList<Category>();
             List<CategoryModel> categoryModels = SQLite.select().from(CategoryModel.class).queryList();
             if (categoryModels.size() >= 1) {
@@ -134,7 +136,9 @@ public class Base_Activity extends AppCompatActivity
                     String status = response.getString("status");
                     if (status.equals("ok")) {
                         tvUsername.setText(response.getString("displayname"));
+                        tvEmail.setText(response.getString("email"));
                         editor.putString(Constants.User_NAME, response.getString("displayname"));
+                        editor.putString(Constants.User_EMAIL, response.getString("email"));
                         editor.apply();
 //                        tvNickname.setText(response.getString("nickname"));
                     }
@@ -218,9 +222,6 @@ public class Base_Activity extends AppCompatActivity
                 }
             });
         }
-//        setMenuFont();
-
-
     }
 
 
@@ -228,7 +229,7 @@ public class Base_Activity extends AppCompatActivity
         NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scrollview);
         rlCategoriesList = (LinearLayout) nestedScrollView.findViewById(R.id.categories_rl);
 
-        ivHomeLogo=(ImageView) findViewById(R.id.home_iv);
+        ivHomeLogo = (ImageView) findViewById(R.id.home_iv);
         ivHomeLogo.setOnClickListener(this);
         tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
         tvFeedback.setTypeface(Constants.getTypeface_Light(this));
@@ -247,6 +248,10 @@ public class Base_Activity extends AppCompatActivity
         tvUsername = (TextView) findViewById(R.id.profile_username_tv);
         tvUsername.setTypeface(Constants.getTypeface_Light(this));
         tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
+        tvEmail = (TextView) findViewById(R.id.profile_email_tv);
+        tvEmail.setTypeface(Constants.getTypeface_Light(this));
+        tvEmail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
 
         tvHomePosts = (TextView) findViewById(R.id.home_tv);
         tvHomePosts.setTypeface(Constants.getTypeface_Light(this));

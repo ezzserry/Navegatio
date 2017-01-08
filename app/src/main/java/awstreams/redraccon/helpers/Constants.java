@@ -53,6 +53,7 @@ public class Constants {
     public static final String isLoggedin = "isLogged";
     public static final String User_ID = "userid";
     public static final String User_NAME = "username";
+    public static final String User_EMAIL = "email";
     public static final String defaultTextSize = "default";
     public static final String fbAccessToken = "token";
     public static final String categoryID_Key = "categID";

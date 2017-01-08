@@ -62,8 +62,6 @@ public class NewslistAdapter extends RecyclerView.Adapter<NewslistAdapter.MyCust
                         public void onSuccess() {
                             holder.imgPhoto.setVisibility(View.VISIBLE);
                             holder.progressBar.setVisibility(View.GONE);
-
-
                         }
 
                         @Override
