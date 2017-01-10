@@ -69,10 +69,7 @@ public class Home_Fragment extends Fragment {
     private TextView tvTitle, tvDescription;
     private NewsItem newsItem;
     private FrameLayout topContainer;
-    private int imgHeight, imgWidth;
-
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private int imgHeight;
 
     public Home_Fragment(String category_id, String query, Boolean isHome) {
         this.sCategory_id = category_id;
@@ -366,8 +363,9 @@ public class Home_Fragment extends Fragment {
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                             imgHeight = Integer.parseInt(newsItem.getImages().getFull().getHeight());
-                            if (imgHeight >= getActivity().getResources().getDimension(R.dimen.img_large_height)) {
-                                imgHeight = (int) getActivity().getResources().getDimension(R.dimen.img_large_height);
+
+                            if (imgHeight > 500) {
+                                imgHeight = 500;
                             }
                             FrameLayout.LayoutParams lParams;
                             lParams = new FrameLayout.LayoutParams(

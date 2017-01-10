@@ -100,7 +100,6 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     private FrameLayout.LayoutParams lParams;
     private int imgHeight;
     private String postID;
-    private LinearLayout rlTagsContainer, newRowofTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,8 +172,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
                                     @Override
                                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                        if (imgHeight >= getResources().getDimension(R.dimen.img_large_height)) {
-                                            imgHeight = (int) getResources().getDimension(R.dimen.img_large_height);
+                                        if (imgHeight >500) {
+                                            imgHeight = 500;
                                         }
                                         lParams = new FrameLayout.LayoutParams(
                                                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -365,7 +364,6 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     }
 
     private void initViews() {
-        rlTagsContainer = (LinearLayout) findViewById(R.id.tags_container_rl);
 
         btnPreviousPost = (Button) findViewById(R.id.previous_post_ib);
         btnPreviousPost.setOnClickListener(this);

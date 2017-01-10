@@ -92,8 +92,44 @@ public class Base_Activity extends AppCompatActivity
 
         cd = new ConnectionDetector(this);
         isInternetPresent = cd.isConnectingToInternet();
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+
+
+    }
+
+    private void initViews() {
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scrollview);
+        rlCategoriesList = (LinearLayout) nestedScrollView.findViewById(R.id.categories_rl);
+
+        ivHomeLogo = (ImageView) findViewById(R.id.home_iv);
+        ivHomeLogo.setOnClickListener(this);
+        tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
+        tvFeedback.setTypeface(Constants.getTypeface_Light(this));
+        tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvFeedback.setOnClickListener(this);
+
+        tvRate = (TextView) nestedScrollView.findViewById(R.id.menu_rate_us_tv);
+        tvRate.setTypeface(Constants.getTypeface_Light(this));
+        tvRate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvRate.setOnClickListener(this);
+        tvSetting = (TextView) nestedScrollView.findViewById(R.id.menu_setting_tv);
+        tvSetting.setTypeface(Constants.getTypeface_Light(this));
+        tvSetting.setOnClickListener(this);
+        tvSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+        tvUsername = (TextView) findViewById(R.id.profile_username_tv);
+        tvUsername.setTypeface(Constants.getTypeface_Medium(this));
+        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+        tvEmail = (TextView) findViewById(R.id.profile_email_tv);
+        tvEmail.setTypeface(Constants.getTypeface_Medium(this));
+        tvEmail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+        tvHomePosts = (TextView) findViewById(R.id.home_tv);
+        tvHomePosts.setTypeface(Constants.getTypeface_Light(this));
+        tvHomePosts.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        tvHomePosts.setOnClickListener(this);
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String username = sharedPrefs.getString(Constants.User_NAME, "");
         String email = sharedPrefs.getString(Constants.User_EMAIL, "");
         if (isInternetPresent) {
@@ -115,13 +151,12 @@ public class Base_Activity extends AppCompatActivity
                 }
                 updateNavigationList(categoryList);
 //                onCategoryClick(categoryList.get(0), myTextViews[0]);
-                gethomeposts();
+                getHomePosts();
 
             } else
                 Toast.makeText(this, getResources().getString(R.string.connection_error), Toast.LENGTH_LONG).show();
 
         }
-
 
     }
 
@@ -171,7 +206,7 @@ public class Base_Activity extends AppCompatActivity
                             categoryModel.save();
                         }
                         updateNavigationList(categoryList);
-                        gethomeposts();
+                        getHomePosts();
 //                        onCategoryClick(categoryList.get(0), myTextViews[0]);
                     }
                 } catch (JSONException e) {
@@ -185,7 +220,6 @@ public class Base_Activity extends AppCompatActivity
             }
         });
     }
-
 
     private void updateNavigationList(final List<Category> categoryList) {
         final int noTextviews = categoryList.size();
@@ -222,42 +256,6 @@ public class Base_Activity extends AppCompatActivity
                 }
             });
         }
-    }
-
-
-    private void initViews() {
-        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scrollview);
-        rlCategoriesList = (LinearLayout) nestedScrollView.findViewById(R.id.categories_rl);
-
-        ivHomeLogo = (ImageView) findViewById(R.id.home_iv);
-        ivHomeLogo.setOnClickListener(this);
-        tvFeedback = (TextView) nestedScrollView.findViewById(R.id.menu_feedback_tv);
-        tvFeedback.setTypeface(Constants.getTypeface_Light(this));
-        tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        tvFeedback.setOnClickListener(this);
-
-        tvRate = (TextView) nestedScrollView.findViewById(R.id.menu_rate_us_tv);
-        tvRate.setTypeface(Constants.getTypeface_Light(this));
-        tvRate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        tvRate.setOnClickListener(this);
-        tvSetting = (TextView) nestedScrollView.findViewById(R.id.menu_setting_tv);
-        tvSetting.setTypeface(Constants.getTypeface_Light(this));
-        tvSetting.setOnClickListener(this);
-        tvSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-
-        tvUsername = (TextView) findViewById(R.id.profile_username_tv);
-        tvUsername.setTypeface(Constants.getTypeface_Light(this));
-        tvUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-
-        tvEmail = (TextView) findViewById(R.id.profile_email_tv);
-        tvEmail.setTypeface(Constants.getTypeface_Light(this));
-        tvEmail.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-
-        tvHomePosts = (TextView) findViewById(R.id.home_tv);
-        tvHomePosts.setTypeface(Constants.getTypeface_Light(this));
-        tvHomePosts.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        tvHomePosts.setOnClickListener(this);
-
     }
 
     @Override
@@ -380,11 +378,11 @@ public class Base_Activity extends AppCompatActivity
                 break;
 
             case R.id.home_tv:
-                gethomeposts();
+                getHomePosts();
                 break;
 
             case R.id.home_iv:
-                gethomeposts();
+                getHomePosts();
                 break;
         }
 
@@ -394,7 +392,7 @@ public class Base_Activity extends AppCompatActivity
 
     }
 
-    private void gethomeposts() {
+    private void getHomePosts() {
         Fragment fragment = new Home_Fragment(null, null, true);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
