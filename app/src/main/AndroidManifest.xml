@@ -8,9 +8,7 @@
 
     <compatible-screens>
         <!-- all small size screens -->
-        <screen
-            android:screenDensity="ldpi"
-            android:screenSize="small" />
+
         <screen
             android:screenDensity="mdpi"
             android:screenSize="small" />
@@ -20,10 +18,9 @@
         <screen
             android:screenDensity="xhdpi"
             android:screenSize="small" />
+
         <!-- all normal size screens -->
-        <screen
-            android:screenDensity="ldpi"
-            android:screenSize="normal" />
+
         <screen
             android:screenDensity="mdpi"
             android:screenSize="normal" />
@@ -33,6 +30,19 @@
         <screen
             android:screenDensity="xhdpi"
             android:screenSize="normal" />
+
+
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="large"/>
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="large"/>
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="large"/>
+
+
     </compatible-screens>
     <application
         android:name=".helpers.MyApplication"

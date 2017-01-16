@@ -90,8 +90,7 @@ public class Base_Activity extends AppCompatActivity
         initViews();
         mListener = (OnCategoryClickListener) this;
 
-        cd = new ConnectionDetector(this);
-        isInternetPresent = cd.isConnectingToInternet();
+
 
 
 
@@ -132,6 +131,8 @@ public class Base_Activity extends AppCompatActivity
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String username = sharedPrefs.getString(Constants.User_NAME, "");
         String email = sharedPrefs.getString(Constants.User_EMAIL, "");
+        cd = new ConnectionDetector(this);
+        isInternetPresent = cd.isConnectingToInternet();
         if (isInternetPresent) {
             if (!username.equals("") && !email.equals("")) {
                 tvUsername.setText(username);

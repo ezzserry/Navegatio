@@ -26,13 +26,11 @@ import org.json.JSONObject;
 
 import awstreams.redraccon.R;
 import awstreams.redraccon.activities.Base_Activity;
-import awstreams.redraccon.activities.Sign_in_Activity;
 import awstreams.redraccon.activities.Sign_up_Activity;
 import awstreams.redraccon.helpers.ConnectionDetector;
 import awstreams.redraccon.helpers.Constants;
 import awstreams.redraccon.helpers.ServicesHelper;
 import awstreams.redraccon.helpers.Utils;
-import awstreams.redraccon.models.User;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -154,6 +152,8 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean(Constants.isLoggedin, false);
                     editor.putString(Constants.User_ID, "");
+                    editor.putString(Constants.User_NAME, "");
+                    editor.putString(Constants.User_EMAIL, "");
                     editor.apply();
                     Intent intent = new Intent(getActivity(), Sign_up_Activity.class);
                     ActivityCompat.finishAffinity(getActivity());
