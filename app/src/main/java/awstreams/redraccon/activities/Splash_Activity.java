@@ -3,15 +3,10 @@ package awstreams.redraccon.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
-import org.json.JSONObject;
 
 import awstreams.redraccon.R;
 import awstreams.redraccon.helpers.ConnectionDetector;
@@ -32,7 +27,7 @@ public class Splash_Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         startService(new Intent(this, RegistrationServices.class));
-        float test=getResources().getDimension(R.dimen.nSubTitle);
+        float test = getResources().getDimension(R.dimen.nSubTitle);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         isLogged_in = prefs.getBoolean(Constants.isLoggedin, false);
@@ -63,7 +58,6 @@ public class Splash_Activity extends Activity {
                     finish();
                 }
             }, SPLASH_TIME_OUT);
-
         }
     }
 }

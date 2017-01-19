@@ -39,7 +39,8 @@ public class Constants {
     public static final String URL_REGISTER = URL_BASE + "user/register/?nonce=%s&username=%s&display_name=%s&email=%s&user_pass=%s&age=%s" + Ssl;
     public static final String URL_SIGN_IN = URL_BASE + "auth/generate_auth_cookie/?insecure=cool&username=%s&password=%s";
     public static final String URL_GET_RECENT_POSTS = URL_BASE + "core/get_recent_posts/";
-    public static final String URL_GET_POST = URL_BASE + "get_post/?post_id=%s";
+    public static final String URL_GET_POST_BY_ID = URL_BASE + "get_post/?post_id=%s";
+    public static final String URL_GET_POST_BY_SLUG = URL_BASE + "get_post/?post_slug=%s";
     public static final String URL_GET_CATEGORY_INDEX = URL_BASE + "core/get_category_index";
     public static final String URL_GET_CATEGORIES = URL_BASE + "core/get_category_posts/?id=%s";
     public static final String URL_GET_BASE_USER = URL_BASE + "user/";

@@ -92,9 +92,21 @@ public class ServicesHelper {
         Volley.newRequestQueue(context).add(request);
     }
 
-    public void getPost(Context context, String id, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
-        String URL = Constants.URL_GET_POST;
+    public void getPostbyID(Context context, String id, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
+        String URL = Constants.URL_GET_POST_BY_ID;
         URL = String.format(URL, id);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), success, errorListener);
+//        StringRequest stringRequest = new StringRequest(URL, success, errorListener);
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(context).add(jsonObjectRequest);
+    }
+
+    public void getPostbySlug(Context context, String slug, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
+        String URL = Constants.URL_GET_POST_BY_SLUG;
+        URL = String.format(URL, slug);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), success, errorListener);
 //        StringRequest stringRequest = new StringRequest(URL, success, errorListener);
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(

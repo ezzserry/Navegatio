@@ -91,9 +91,6 @@ public class Base_Activity extends AppCompatActivity
         mListener = (OnCategoryClickListener) this;
 
 
-
-
-
     }
 
     private void initViews() {
@@ -277,7 +274,8 @@ public class Base_Activity extends AppCompatActivity
         if (isInternetPresent) {
             String id = newsItem.getId();
             Intent intent = new Intent(this, DetailedNews_Activity.class);
-            intent.putExtra(getResources().getString(R.string.post_intent_key), id);
+            intent.putExtra(getResources().getString(R.string.post_by_id_intent_key), id);
+            intent.putExtra(getResources().getString(R.string.post_by_slug_intent_key), "");
             sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             editor = sharedPrefs.edit();
             editor.putBoolean(Constants.isNotification, false);

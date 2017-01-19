@@ -41,7 +41,8 @@ public class GCMListener extends GcmListenerService {
     private void sendNotification(String message, String id) {
         editor = sharedPrefs.edit();
         Intent intent = new Intent(this, DetailedNews_Activity.class);
-        intent.putExtra(getResources().getString(R.string.post_intent_key), id);
+        intent.putExtra(getResources().getString(R.string.post_by_id_intent_key), id);
+        intent.putExtra(getResources().getString(R.string.post_by_slug_intent_key), "");
         editor.putBoolean(Constants.isNotification, true);
         editor.apply();
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

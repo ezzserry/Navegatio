@@ -99,7 +99,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
     private FrameLayout.LayoutParams lParams;
     private int imgHeight;
-    private String postID;
+    private String postID, postSlug;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,19 +112,28 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         Bundle bundle = intent.getExtras();
 
         if (bundle != null) {
-            postID = bundle.getString(getResources().getString(R.string.post_intent_key));
+            postID = bundle.getString(getResources().getString(R.string.post_by_id_intent_key));
+            postSlug = bundle.getString(getResources().getString(R.string.post_by_slug_intent_key));
             cd = new ConnectionDetector(this);
             isInternetPresent = cd.isConnectingToInternet();
             if (isInternetPresent) {
-                setPost(postID);
-
-            } else
+                if (!postID.equals("") && postSlug.equals(""))
+                    setPostbyID(postID);
+                else if (postID.equals("") && !postSlug.equals(""))
+                    setPostbySlug(postSlug);
+                else {
+                    pbPageContent.setVisibility(View.GONE);
+                    Snackbar.make(llPage_content, "please reload page again ", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
+            } else {
+                pbPageContent.setVisibility(View.GONE);
                 Snackbar.make(llPage_content, "no internet connection ", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
         }
     }
 
-    private void setPost(String id) {
-        ServicesHelper.getInstance().getPost(this, id, new Response.Listener<JSONObject>() {
+    private void setPostbyID(String id) {
+        ServicesHelper.getInstance().getPostbyID(this, id, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -172,7 +181,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
                                     @Override
                                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                        if (imgHeight >500) {
+                                        if (imgHeight > 500) {
                                             imgHeight = 500;
                                         }
                                         lParams = new FrameLayout.LayoutParams(
@@ -315,6 +324,200 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             }
         });
     }
+
+    private void setPostbySlug(String slug) {
+        ServicesHelper.getInstance().getPostbySlug(this, slug, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString("status").equals("ok")) {
+                        JSONObject post = response.getJSONObject("post");
+                        imgHeight = Integer.parseInt(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("height"));
+//                        Picasso.with(getApplicationContext())
+//                                .load(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"))
+//                                .into(ivPostimage, new com.squareup.picasso.Callback() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                        ivPostimage.setVisibility(View.VISIBLE);
+//                                        pbPost_img.setVisibility(View.GONE);
+//                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
+//                                        ivPostimage.setLayoutParams(lParams);
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError() {
+//                                        ivPostimage.setVisibility(View.VISIBLE);
+//                                        pbPost_img.setVisibility(View.GONE);
+//                                        ivPostimage.setImageResource(R.mipmap.placeholder);
+//
+//                                    }
+//                                });
+                        Glide.with(getApplicationContext())
+                                .load(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .fitCenter()
+                                .listener(new RequestListener<String, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        lParams = new FrameLayout.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                                        pbPost_img.setVisibility(View.GONE);
+                                        ivPostimage.setVisibility(View.VISIBLE);
+                                        ivPostimage.setImageResource(R.mipmap.placeholder);
+                                        ivPostimage.setLayoutParams(lParams);
+
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                        if (imgHeight > 500) {
+                                            imgHeight = 500;
+                                        }
+                                        lParams = new FrameLayout.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                imgHeight);
+                                        pbPost_img.setVisibility(View.GONE);
+                                        ivPostimage.setVisibility(View.VISIBLE);
+                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                        ivPostimage.setLayoutParams(lParams);
+                                        return false;
+                                    }
+                                })
+                                .into(ivPostimage);
+
+                        webView.loadDataWithBaseURL(null, "<head>\n" +
+                                "\n" +
+                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/themes/onfleek/style.css' type='text/css' media='all' />\n" +
+                                "\n" +
+                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
+                                "\n" +
+                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/css/vc_carousel.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
+                                "\n" +
+                                "\n" +
+                                "\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/jquery/jquery.js'></script>\n" +
+                                "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js'></script>\n" +
+                                "</head>\n" +
+                                "<body class=\"lazy-wrapper\"><style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style> " + post.getString("content") + "" +
+                                "<script>\n" +
+                                "jQuery(function($) {\n" +
+                                "    $(\"img.lazy\").each(function() {\n" +
+                                "\n" +
+                                "    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n" +
+                                "    \n" +
+                                "}); \n" +
+                                "\n" +
+                                "});\n" +
+                                "</script>\n" +
+                                "\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js'></script>\n" +
+                                "<script type='text/javascript'>\n" +
+                                "/* <![CDATA[ */\n" +
+                                "var options = {\"animationTransition\":{\"is_page_transition\":\"no\",\"preloader_bg_color\":\"#ffffff\",\"animation_transition\":\"fade-in\",\"preloader_style\":\"none\",\"css_animation\":{\"loader_style\":\"style-2\",\"loader_color\":\"#e2e2e2\"},\"image\":{\"loader_image\":\"\"}},\"is_lazy_loading\":\"yes\",\"isStickySidebar\":\"yes\",\"isBackToTopButton\":\"yes\",\"pagination\":{\"currentPage\":\"\",\"link\":\"http:\\/\\/redracc.com\\/egyptian-currency-designs\",\"totalPages\":0,\"format\":\"\",\"ajaxurl\":\"http:\\/\\/redracc.com\\/wp-admin\\/admin-ajax.php\",\"postID\":2440},\"stickyLogo\":\"http:\\/\\/redracc.com\\/wp-content\\/uploads\\/2016\\/08\\/logo-text.png\",\"site_url\":\"http:\\/\\/redracc.com\",\"isMobile\":\"no\",\"isStickyHeader\":\"yes\",\"isStickyShare\":\"yes\",\"isFeatureImageLightbox\":\"no\",\"isEnableSideArea\":\"yes\"};\n" +
+                                "/* ]]> */\n" +
+                                "</script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/navigation.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/wp-embed.min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/transition.min.js'></script>\n" +
+                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/vc_carousel.min.js'></script>\n" +
+                                "</body>", "text/html", "UTF-8", null);
+                        webView.setVisibility(View.VISIBLE);
+                        pbContent.setVisibility(View.GONE);
+                        pbPageContent.setVisibility(View.GONE);
+                        llPage_content.setVisibility(View.VISIBLE);
+                        tvTitle.setText(Utils.convertHTMLtoString(post.getString("title")));
+                        tvExcerpt.setText(Utils.convertHTMLtoString(post.getString("excerpt")));
+                        tvName.setText("Author Name: " + post.getJSONObject("author").getString("name"));
+                        tvDescription.setText("Description: " + post.getJSONObject("author").getString("description"));
+                        tvNickname.setText("Nick name: " + post.getJSONObject("author").getString("nickname"));
+                        collapsingToolbarLayout.setTitle(Utils.convertHTMLtoString(post.getString("title")));
+
+                        Picasso.with(getApplicationContext())
+                                .load(post.getJSONObject("author").getString("avatar"))
+                                .into(ivAuthorimage, new com.squareup.picasso.Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        ivAuthorimage.setVisibility(View.VISIBLE);
+                                        pbAuthorimg.setVisibility(View.GONE);
+//                                        dynamicToolbarColor();
+
+
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        pbAuthorimg.setVisibility(View.GONE);
+                                        ivAuthorimage.setVisibility(View.VISIBLE);
+                                        ivAuthorimage.setImageResource(R.mipmap.redracc_menu_logo);
+
+                                    }
+                                });
+                        ShareURL = post.getString("url");
+
+                        Gson gson = new GsonBuilder().serializeNulls().create();
+
+
+                        JSONArray tagsArray = post.getJSONArray("tags");
+                        tagsList = Arrays.asList(gson.fromJson(tagsArray.toString(), Tags[].class));
+                        updateTags(tagsList);
+                        try {
+                            sPreviousPost = response.getString("previous_url");
+                            sPreviousPost = sPreviousPost.substring(18);
+                            btnPreviousPost.setVisibility(View.VISIBLE);
+
+                        } catch (JSONException e) {
+                            sPreviousPost = null;
+
+                        }
+                        try {
+                            sNextPost = response.getString("next_url");
+                            sNextPost = sNextPost.substring(18);
+                            btnNextPost.setVisibility(View.VISIBLE);
+
+                        } catch (JSONException e) {
+                            sNextPost = null;
+                        }
+                        setLoading(true);
+                        loadComments(ShareURL);
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    pbPost_img.setVisibility(View.GONE);
+                    pbAuthorimg.setVisibility(View.GONE);
+                    ivPostimage.setVisibility(View.VISIBLE);
+                    ivPostimage.setImageResource(R.mipmap.placeholder);
+                    ivAuthorimage.setVisibility(View.VISIBLE);
+                    ivAuthorimage.setImageResource(R.mipmap.redracc_menu_logo);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String json = null;
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.data != null) {
+                    switch (response.statusCode) {
+                        case 404:
+                            json = new String(response.data);
+                            json = trimMessage(json, "error");
+                            if (json != null) displayMessage(json);
+                            finish();
+                            break;
+                    }
+                }
+            }
+        });
+    }
+
 
     private void updateTags(final List<Tags> tagsList) {
         LinearLayout.LayoutParams lprams = new LinearLayout.LayoutParams(
@@ -460,7 +663,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
             case R.id.previous_post_ib:
                 intent = new Intent(this, DetailedNews_Activity.class);
-                intent.putExtra(getResources().getString(R.string.post_intent_key), sPreviousPost);
+                intent.putExtra(getResources().getString(R.string.post_by_slug_intent_key), sPreviousPost);
+                intent.putExtra(getResources().getString(R.string.post_by_id_intent_key), "");
                 sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 editor = sharedPreferences.edit();
                 editor.putBoolean(Constants.isNotification, false);
@@ -470,7 +674,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
             case R.id.next_post_ib:
                 intent = new Intent(this, DetailedNews_Activity.class);
-                intent.putExtra(getResources().getString(R.string.post_intent_key), sNextPost);
+                intent.putExtra(getResources().getString(R.string.post_by_slug_intent_key), sNextPost);
+                intent.putExtra(getResources().getString(R.string.post_by_id_intent_key), "");
                 sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 editor = sharedPreferences.edit();
                 editor.putBoolean(Constants.isNotification, false);
@@ -667,6 +872,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
     //Somewhere that has access to a context
     public void displayMessage(String toastString) {
         Toast.makeText(DetailedNews_Activity.this, toastString, Toast.LENGTH_LONG).show();
+        pbPageContent.setVisibility(View.GONE);
+
     }
 
 

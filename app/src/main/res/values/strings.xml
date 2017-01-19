@@ -24,7 +24,8 @@
     <string name="title_comments">Comments</string>
     <string name="write_comment">Please write your comment</string>
     <string name="post_comment">post</string>
-    <string name="post_intent_key">postid</string>
+    <string name="post_by_id_intent_key">postid</string>
+    <string name="post_by_slug_intent_key">postslug</string>
     <string name="tagid_intent_key">tagid</string>
     <string name="tagtitle_intent_key">tagtitle</string>
     <string name="categoryid_intent_key">categid</string>

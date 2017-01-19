@@ -29,7 +29,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@mipmap/placeholder"
-                    android:transitionName="post"
                     android:visibility="gone" />
 
                 <ProgressBar
