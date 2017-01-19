@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="awstreams.redraccon.activities.Splash_Activity"
+    tools:context="awstreams.redracc.activities.Splash_Activity"
     android:background="@mipmap/splash">
 
 </RelativeLayout>

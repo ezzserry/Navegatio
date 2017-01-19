@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="awstreams.redraccon">
+    package="awstreams.redracc">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -45,7 +45,7 @@
 
     </compatible-screens>
     <application
-        android:name=".helpers.MyApplication"
+        android:name="awstreams.redracc.helpers.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo_ic"
         android:label="@string/app_name"
@@ -65,12 +65,12 @@
         </receiver>
 
         <activity
-            android:name=".activities.Base_Activity"
+            android:name="awstreams.redracc.activities.Base_Activity"
             android:label="@string/title_activity_side_menu"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.Splash_Activity"
+            android:name="awstreams.redracc.activities.Splash_Activity"
             android:screenOrientation="nosensor"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -80,12 +80,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.Sign_up_Activity"
+            android:name="awstreams.redracc.activities.Sign_up_Activity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|adjustPan" />
         <activity
-            android:name=".activities.Sign_in_Activity"
+            android:name="awstreams.redracc.activities.Sign_in_Activity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|adjustPan" />
@@ -103,18 +103,18 @@
             android:value="fc859c7933517f6aef1fe558890294a0fdba9366" />
 
         <activity
-            android:name=".activities.DetailedNews_Activity"
+            android:name="awstreams.redracc.activities.DetailedNews_Activity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".notifications.GCMListener"
+            android:name="awstreams.redracc.notifications.GCMListener"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <service android:name=".notifications.RegistrationServices" />
+        <service android:name="awstreams.redracc.notifications.RegistrationServices" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
@@ -122,7 +122,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".activities.TagActivity"
+            android:name="awstreams.redracc.activities.TagActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme"></activity>
     </application>
