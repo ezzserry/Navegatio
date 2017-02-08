@@ -6,46 +6,56 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <compatible-screens>
-        <!-- all small size screens -->
+    <!--<compatible-screens>-->
+        <!--&lt;!&ndash; all small size screens &ndash;&gt;-->
 
-        <screen
-            android:screenDensity="mdpi"
-            android:screenSize="small" />
-        <screen
-            android:screenDensity="hdpi"
-            android:screenSize="small" />
-        <screen
-            android:screenDensity="xhdpi"
-            android:screenSize="small" />
+        <!--<screen-->
+            <!--android:screenDensity="mdpi"-->
+            <!--android:screenSize="small" />-->
+        <!--<screen-->
+            <!--android:screenDensity="hdpi"-->
+            <!--android:screenSize="small" />-->
+        <!--<screen-->
+            <!--android:screenDensity="xhdpi"-->
+            <!--android:screenSize="small" />-->
 
-        <!-- all normal size screens -->
+        <!--&lt;!&ndash; all normal size screens &ndash;&gt;-->
 
-        <screen
-            android:screenDensity="mdpi"
-            android:screenSize="normal" />
-        <screen
-            android:screenDensity="hdpi"
-            android:screenSize="normal" />
-        <screen
-            android:screenDensity="xhdpi"
-            android:screenSize="normal" />
-
-
-        <screen
-            android:screenDensity="mdpi"
-            android:screenSize="large"/>
-        <screen
-            android:screenDensity="hdpi"
-            android:screenSize="large"/>
-        <screen
-            android:screenDensity="xhdpi"
-            android:screenSize="large"/>
+        <!--<screen-->
+            <!--android:screenDensity="mdpi"-->
+            <!--android:screenSize="normal" />-->
+        <!--<screen-->
+            <!--android:screenDensity="hdpi"-->
+            <!--android:screenSize="normal" />-->
+        <!--<screen-->
+            <!--android:screenDensity="xhdpi"-->
+            <!--android:screenSize="normal" />-->
 
 
-    </compatible-screens>
+        <!--<screen-->
+            <!--android:screenDensity="mdpi"-->
+            <!--android:screenSize="large" />-->
+        <!--<screen-->
+            <!--android:screenDensity="hdpi"-->
+            <!--android:screenSize="large" />-->
+        <!--<screen-->
+            <!--android:screenDensity="xhdpi"-->
+            <!--android:screenSize="large" />-->
+
+
+        <!--<screen-->
+            <!--android:screenDensity="mdpi"-->
+            <!--android:screenSize="xlarge" />-->
+        <!--<screen-->
+            <!--android:screenDensity="hdpi"-->
+            <!--android:screenSize="xlarge" />-->
+        <!--<screen-->
+            <!--android:screenDensity="xhdpi"-->
+            <!--android:screenSize="xlarge" />-->
+            <!--</compatible-screens>-->
+
     <application
-        android:name="awstreams.redracc.helpers.MyApplication"
+        android:name=".helpers.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo_ic"
         android:label="@string/app_name"
@@ -122,7 +132,7 @@
             android:exported="true" />
 
         <activity
-            android:name="awstreams.redracc.activities.TagActivity"
+            android:name=".activities.TagActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme"></activity>
     </application>

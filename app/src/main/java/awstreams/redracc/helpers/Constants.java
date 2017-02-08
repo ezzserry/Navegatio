@@ -33,6 +33,7 @@ public class Constants {
 
     public static final String KEY_Prefs_Nonce = "nonce_key";
     public static final String Ssl = "&insecure=cool";
+    public static final String URL = "http://redracc.com/";
     public static final String URL_BASE = "http://redracc.com/api-GfjSL8AeXa/";
     public static final String URL_GET_HOME_POSTS = URL_BASE + "get_home_posts/";
     public static final String URL_GET_NONCE = URL_BASE + "get_nonce/?controller=user&method=register";

@@ -57,6 +57,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -117,9 +119,9 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             cd = new ConnectionDetector(this);
             isInternetPresent = cd.isConnectingToInternet();
             if (isInternetPresent) {
-                if (!postID.equals("") && postSlug.equals(""))
+                if (!postID.isEmpty() && postSlug.isEmpty())
                     setPostbyID(postID);
-                else if (postID.equals("") && !postSlug.equals(""))
+                else if (postID.isEmpty() && !postSlug.isEmpty())
                     setPostbySlug(postSlug);
                 else {
                     pbPageContent.setVisibility(View.GONE);
@@ -196,45 +198,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                 })
                                 .into(ivPostimage);
 
-                        webView.loadDataWithBaseURL(null, "<head>\n" +
-                                "\n" +
-                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/themes/onfleek/style.css' type='text/css' media='all' />\n" +
-                                "\n" +
-                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
-                                "\n" +
-                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/css/vc_carousel.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
-                                "\n" +
-                                "\n" +
-                                "\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/jquery/jquery.js'></script>\n" +
-                                "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js'></script>\n" +
-                                "</head>\n" +
-                                "<body class=\"lazy-wrapper\"><style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style> " + post.getString("content") + "" +
-                                "<script>\n" +
-                                "jQuery(function($) {\n" +
-                                "    $(\"img.lazy\").each(function() {\n" +
-                                "\n" +
-                                "    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n" +
-                                "    \n" +
-                                "}); \n" +
-                                "\n" +
-                                "});\n" +
-                                "</script>\n" +
-                                "\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js'></script>\n" +
-                                "<script type='text/javascript'>\n" +
-                                "/* <![CDATA[ */\n" +
-                                "var options = {\"animationTransition\":{\"is_page_transition\":\"no\",\"preloader_bg_color\":\"#ffffff\",\"animation_transition\":\"fade-in\",\"preloader_style\":\"none\",\"css_animation\":{\"loader_style\":\"style-2\",\"loader_color\":\"#e2e2e2\"},\"image\":{\"loader_image\":\"\"}},\"is_lazy_loading\":\"yes\",\"isStickySidebar\":\"yes\",\"isBackToTopButton\":\"yes\",\"pagination\":{\"currentPage\":\"\",\"link\":\"http:\\/\\/redracc.com\\/egyptian-currency-designs\",\"totalPages\":0,\"format\":\"\",\"ajaxurl\":\"http:\\/\\/redracc.com\\/wp-admin\\/admin-ajax.php\",\"postID\":2440},\"stickyLogo\":\"http:\\/\\/redracc.com\\/wp-content\\/uploads\\/2016\\/08\\/logo-text.png\",\"site_url\":\"http:\\/\\/redracc.com\",\"isMobile\":\"no\",\"isStickyHeader\":\"yes\",\"isStickyShare\":\"yes\",\"isFeatureImageLightbox\":\"no\",\"isEnableSideArea\":\"yes\"};\n" +
-                                "/* ]]> */\n" +
-                                "</script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/navigation.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/wp-embed.min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/transition.min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/vc_carousel.min.js'></script>\n" +
-                                "</body>", "text/html", "UTF-8", null);
+                        webView.loadDataWithBaseURL(Constants.URL, "<head>\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/themes/onfleek/style.css\' type=\'text/css\' media=\'all\' />\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1\' type=\'text/css\' media=\'all\' />\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/jquery/jquery.js\'></script>\n<script type=\'text/javascript\' src=\'https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js\'></script>\n</head>\n<body class=\"lazy-wrapper\">\n"+post.getString("content")+"\n<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>\n<script>\njQuery(function($) {\n$(\"img.lazy\").each(function() {\n    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n\n}); \n});\n</script>\n\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js\'></script>\n<script type=\'text/javascript\'>\n\n</script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/navigation.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/wp-embed.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js\'></script>\n</body>", "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
                         pbContent.setVisibility(View.GONE);
                         pbPageContent.setVisibility(View.GONE);
@@ -389,45 +353,9 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                 })
                                 .into(ivPostimage);
 
-                        webView.loadDataWithBaseURL(null, "<head>\n" +
-                                "\n" +
-                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/themes/onfleek/style.css' type='text/css' media='all' />\n" +
-                                "\n" +
-                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
-                                "\n" +
-                                "<link rel='stylesheet' id='flexslider-css'  href='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/css/vc_carousel.min.css?ver=4.12.1' type='text/css' media='all' />\n" +
-                                "\n" +
-                                "\n" +
-                                "\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/jquery/jquery.js'></script>\n" +
-                                "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js'></script>\n" +
-                                "</head>\n" +
-                                "<body class=\"lazy-wrapper\"><style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style> " + post.getString("content") + "" +
-                                "<script>\n" +
-                                "jQuery(function($) {\n" +
-                                "    $(\"img.lazy\").each(function() {\n" +
-                                "\n" +
-                                "    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n" +
-                                "    \n" +
-                                "}); \n" +
-                                "\n" +
-                                "});\n" +
-                                "</script>\n" +
-                                "\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js'></script>\n" +
-                                "<script type='text/javascript'>\n" +
-                                "/* <![CDATA[ */\n" +
-                                "var options = {\"animationTransition\":{\"is_page_transition\":\"no\",\"preloader_bg_color\":\"#ffffff\",\"animation_transition\":\"fade-in\",\"preloader_style\":\"none\",\"css_animation\":{\"loader_style\":\"style-2\",\"loader_color\":\"#e2e2e2\"},\"image\":{\"loader_image\":\"\"}},\"is_lazy_loading\":\"yes\",\"isStickySidebar\":\"yes\",\"isBackToTopButton\":\"yes\",\"pagination\":{\"currentPage\":\"\",\"link\":\"http:\\/\\/redracc.com\\/egyptian-currency-designs\",\"totalPages\":0,\"format\":\"\",\"ajaxurl\":\"http:\\/\\/redracc.com\\/wp-admin\\/admin-ajax.php\",\"postID\":2440},\"stickyLogo\":\"http:\\/\\/redracc.com\\/wp-content\\/uploads\\/2016\\/08\\/logo-text.png\",\"site_url\":\"http:\\/\\/redracc.com\",\"isMobile\":\"no\",\"isStickyHeader\":\"yes\",\"isStickyShare\":\"yes\",\"isFeatureImageLightbox\":\"no\",\"isEnableSideArea\":\"yes\"};\n" +
-                                "/* ]]> */\n" +
-                                "</script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/navigation.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-includes/js/wp-embed.min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/transition.min.js'></script>\n" +
-                                "<script type='text/javascript' src='http://redracc.com/wp-content/plugins/js_composer/assets/lib/vc_carousel/js/vc_carousel.min.js'></script>\n" +
-                                "</body>", "text/html", "UTF-8", null);
+                        webView.loadDataWithBaseURL(Constants.URL
+                                ,"<head>\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/themes/onfleek/style.css\' type=\'text/css\' media=\'all\' />\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1\' type=\'text/css\' media=\'all\' />\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/jquery/jquery.js\'></script>\n<script type=\'text/javascript\' src=\'https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js\'></script>\n</head>\n<body class=\"lazy-wrapper\">\n"+post.getString("content")+"\n<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>\n<script>\njQuery(function($) {\n$(\"img.lazy\").each(function() {\n    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n\n}); \n});\n</script>\n\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js\'></script>\n<script type=\'text/javascript\'>\n\n</script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/navigation.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/wp-embed.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js\'></script>\n</body>"
+                                , "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
                         pbContent.setVisibility(View.GONE);
                         pbPageContent.setVisibility(View.GONE);
