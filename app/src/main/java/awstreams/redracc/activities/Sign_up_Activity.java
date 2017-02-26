@@ -93,7 +93,7 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Toast.makeText(Sign_up_Activity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(Sign_up_Activity.this, "couldn't connect with facebook because your email is not verified", Toast.LENGTH_LONG).show();
                     }
                 });
 

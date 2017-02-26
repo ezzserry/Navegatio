@@ -57,8 +57,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -120,9 +118,9 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             isInternetPresent = cd.isConnectingToInternet();
             if (isInternetPresent) {
                 if (!postID.isEmpty() && postSlug.isEmpty())
-                    setPostbyID(postID);
+                    setPost(postID, postSlug);
                 else if (postID.isEmpty() && !postSlug.isEmpty())
-                    setPostbySlug(postSlug);
+                    setPost(postID, postSlug);
                 else {
                     pbPageContent.setVisibility(View.GONE);
                     Snackbar.make(llPage_content, "please reload page again ", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -134,8 +132,8 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void setPostbyID(String id) {
-        ServicesHelper.getInstance().getPostbyID(this, id, new Response.Listener<JSONObject>() {
+    private void setPost(String id, String slug) {
+        ServicesHelper.getInstance().getPostbyID(this, id, slug, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -197,8 +195,23 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                                     }
                                 })
                                 .into(ivPostimage);
-
-                        webView.loadDataWithBaseURL(Constants.URL, "<head>\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/themes/onfleek/style.css\' type=\'text/css\' media=\'all\' />\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1\' type=\'text/css\' media=\'all\' />\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/jquery/jquery.js\'></script>\n<script type=\'text/javascript\' src=\'https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js\'></script>\n</head>\n<body class=\"lazy-wrapper\">\n"+post.getString("content")+"\n<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>\n<script>\njQuery(function($) {\n$(\"img.lazy\").each(function() {\n    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n\n}); \n});\n</script>\n\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js\'></script>\n<script type=\'text/javascript\'>\n\n</script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/navigation.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/wp-embed.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js\'></script>\n</body>", "text/html", "UTF-8", null);
+                        ShareURL = post.getString("url");
+                        String content = post.getString("content");
+                        content = content.replace("<div id=\"fb-root\"></div>\r\n<script>(function(d, s, id) {\r\n  var js, fjs = d.getElementsByTagName(s)[0];\r\n  if (d.getElementById(id)) return;\r\n  js = d.createElement(s); js.id = id;\r\n  js.src = \"//connect.facebook.net/en_GB/all.js#xfbml=1\";\r\n  fjs.parentNode.insertBefore(js, fjs);\r\n}(document, \"script\", \"facebook-jssdk\"));</script>\r\n <fb:comments href=\""
+                                + ShareURL + "\" font=\"arial\" num_posts=\"\" colorscheme=\"light\"  style=\"background:#FFFFFF;padding-top:0px;\r\npadding-right:0px;\r\npadding-bottom:0px;\r\npadding-left:0px;\r\nmargin-top:0px;\r\nmargin-right:0px;\r\nmargin-bottom:0px;\r\nmargin-left:0px;\r\n\"></fb:comments>", "\n");
+                        webView.loadDataWithBaseURL(Constants.URL,
+                                "<head>\n<link rel=\'stylesheet\' id=\'flexslider-css\'  " +
+                                        "href=\'http://redracc.com/wp-content/themes/onfleek/style.css\' type=\'text/css\' " +
+                                        "media=\'all\' />\n<link rel=\'stylesheet\' id=\'flexslider-css\'  " +
+                                        "href=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1\' " +
+                                        "type=\'text/css\' media=\'all\' />\n<script type=\'text/javascript\' " +
+                                        "src=\'http://redracc.com/wp-includes/js/jquery/jquery.js\'></script>\n<script type=\'text/javascript\' " +
+                                        "src=\'https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js\'>" +
+                                        "</script>\n</head>\n<body class=\"lazy-wrapper\">\n" +
+                                        content +
+                                        "\n<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>\n" +
+                                        "<script>\njQuery(function($) {\n$(\"img.lazy\").each(function() " +
+                                        "{\n    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n\n}); \n});\n</script>\n\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js\'></script>\n<script type=\'text/javascript\'>\n\n</script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/navigation.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/wp-embed.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js\'></script>\n</body>", "text/html", "UTF-8", null);
                         webView.setVisibility(View.VISIBLE);
                         pbContent.setVisibility(View.GONE);
                         pbPageContent.setVisibility(View.GONE);
@@ -230,7 +243,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
 
                                     }
                                 });
-                        ShareURL = post.getString("url");
+
 
                         Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -240,7 +253,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                         updateTags(tagsList);
                         try {
                             sPreviousPost = response.getString("previous_url");
-                            sPreviousPost = sPreviousPost.substring(18);
+                            sPreviousPost = sPreviousPost.substring(19);
                             btnPreviousPost.setVisibility(View.VISIBLE);
 
                         } catch (JSONException e) {
@@ -249,7 +262,7 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
                         }
                         try {
                             sNextPost = response.getString("next_url");
-                            sNextPost = sNextPost.substring(18);
+                            sNextPost = sNextPost.substring(19);
                             btnNextPost.setVisibility(View.VISIBLE);
 
                         } catch (JSONException e) {
@@ -288,164 +301,6 @@ public class DetailedNews_Activity extends AppCompatActivity implements View.OnC
             }
         });
     }
-
-    private void setPostbySlug(String slug) {
-        ServicesHelper.getInstance().getPostbySlug(this, slug, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (response.getString("status").equals("ok")) {
-                        JSONObject post = response.getJSONObject("post");
-                        imgHeight = Integer.parseInt(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("height"));
-//                        Picasso.with(getApplicationContext())
-//                                .load(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"))
-//                                .into(ivPostimage, new com.squareup.picasso.Callback() {
-//                                    @Override
-//                                    public void onSuccess() {
-//
-//                                        ivPostimage.setVisibility(View.VISIBLE);
-//                                        pbPost_img.setVisibility(View.GONE);
-//                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
-//                                        ivPostimage.setLayoutParams(lParams);
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onError() {
-//                                        ivPostimage.setVisibility(View.VISIBLE);
-//                                        pbPost_img.setVisibility(View.GONE);
-//                                        ivPostimage.setImageResource(R.mipmap.placeholder);
-//
-//                                    }
-//                                });
-                        Glide.with(getApplicationContext())
-                                .load(post.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .fitCenter()
-                                .listener(new RequestListener<String, GlideDrawable>() {
-                                    @Override
-                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                        lParams = new FrameLayout.LayoutParams(
-                                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                                ViewGroup.LayoutParams.WRAP_CONTENT);
-                                        pbPost_img.setVisibility(View.GONE);
-                                        ivPostimage.setVisibility(View.VISIBLE);
-                                        ivPostimage.setImageResource(R.mipmap.placeholder);
-                                        ivPostimage.setLayoutParams(lParams);
-
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                        if (imgHeight > 500) {
-                                            imgHeight = 500;
-                                        }
-                                        lParams = new FrameLayout.LayoutParams(
-                                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                                imgHeight);
-                                        pbPost_img.setVisibility(View.GONE);
-                                        ivPostimage.setVisibility(View.VISIBLE);
-                                        ivPostimage.setScaleType(ImageView.ScaleType.FIT_XY);
-                                        ivPostimage.setLayoutParams(lParams);
-                                        return false;
-                                    }
-                                })
-                                .into(ivPostimage);
-
-                        webView.loadDataWithBaseURL(Constants.URL
-                                ,"<head>\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/themes/onfleek/style.css\' type=\'text/css\' media=\'all\' />\n<link rel=\'stylesheet\' id=\'flexslider-css\'  href=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/flexslider.min.css?ver=4.12.1\' type=\'text/css\' media=\'all\' />\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/jquery/jquery.js\'></script>\n<script type=\'text/javascript\' src=\'https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js\'></script>\n</head>\n<body class=\"lazy-wrapper\">\n"+post.getString("content")+"\n<style>img{display: inline;height: auto;max-width: 100% !important;padding:0px !important;margin:0px !important;}</style>\n<script>\njQuery(function($) {\n$(\"img.lazy\").each(function() {\n    $(this).attr(\"src\",$(this).attr(\"data-original\"));\n\n}); \n});\n</script>\n\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/inc/df-core/asset/js/custom-script.js\'></script>\n<script type=\'text/javascript\'>\n\n</script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/navigation.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/themes/onfleek/js/skip-link-focus-fix.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-includes/js/wp-embed.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js\'></script>\n<script type=\'text/javascript\' src=\'http://redracc.com/wp-content/plugins/js_composer/assets/lib/bower/flexslider/jquery.flexslider-min.js\'></script>\n</body>"
-                                , "text/html", "UTF-8", null);
-                        webView.setVisibility(View.VISIBLE);
-                        pbContent.setVisibility(View.GONE);
-                        pbPageContent.setVisibility(View.GONE);
-                        llPage_content.setVisibility(View.VISIBLE);
-                        tvTitle.setText(Utils.convertHTMLtoString(post.getString("title")));
-                        tvExcerpt.setText(Utils.convertHTMLtoString(post.getString("excerpt")));
-                        tvName.setText("Author Name: " + post.getJSONObject("author").getString("name"));
-                        tvDescription.setText("Description: " + post.getJSONObject("author").getString("description"));
-                        tvNickname.setText("Nick name: " + post.getJSONObject("author").getString("nickname"));
-                        collapsingToolbarLayout.setTitle(Utils.convertHTMLtoString(post.getString("title")));
-
-                        Picasso.with(getApplicationContext())
-                                .load(post.getJSONObject("author").getString("avatar"))
-                                .into(ivAuthorimage, new com.squareup.picasso.Callback() {
-                                    @Override
-                                    public void onSuccess() {
-                                        ivAuthorimage.setVisibility(View.VISIBLE);
-                                        pbAuthorimg.setVisibility(View.GONE);
-//                                        dynamicToolbarColor();
-
-
-                                    }
-
-                                    @Override
-                                    public void onError() {
-                                        pbAuthorimg.setVisibility(View.GONE);
-                                        ivAuthorimage.setVisibility(View.VISIBLE);
-                                        ivAuthorimage.setImageResource(R.mipmap.redracc_menu_logo);
-
-                                    }
-                                });
-                        ShareURL = post.getString("url");
-
-                        Gson gson = new GsonBuilder().serializeNulls().create();
-
-
-                        JSONArray tagsArray = post.getJSONArray("tags");
-                        tagsList = Arrays.asList(gson.fromJson(tagsArray.toString(), Tags[].class));
-                        updateTags(tagsList);
-                        try {
-                            sPreviousPost = response.getString("previous_url");
-                            sPreviousPost = sPreviousPost.substring(18);
-                            btnPreviousPost.setVisibility(View.VISIBLE);
-
-                        } catch (JSONException e) {
-                            sPreviousPost = null;
-
-                        }
-                        try {
-                            sNextPost = response.getString("next_url");
-                            sNextPost = sNextPost.substring(18);
-                            btnNextPost.setVisibility(View.VISIBLE);
-
-                        } catch (JSONException e) {
-                            sNextPost = null;
-                        }
-                        setLoading(true);
-                        loadComments(ShareURL);
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    pbPost_img.setVisibility(View.GONE);
-                    pbAuthorimg.setVisibility(View.GONE);
-                    ivPostimage.setVisibility(View.VISIBLE);
-                    ivPostimage.setImageResource(R.mipmap.placeholder);
-                    ivAuthorimage.setVisibility(View.VISIBLE);
-                    ivAuthorimage.setImageResource(R.mipmap.redracc_menu_logo);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String json = null;
-                NetworkResponse response = error.networkResponse;
-                if (response != null && response.data != null) {
-                    switch (response.statusCode) {
-                        case 404:
-                            json = new String(response.data);
-                            json = trimMessage(json, "error");
-                            if (json != null) displayMessage(json);
-                            finish();
-                            break;
-                    }
-                }
-            }
-        });
-    }
-
 
     private void updateTags(final List<Tags> tagsList) {
         LinearLayout.LayoutParams lprams = new LinearLayout.LayoutParams(

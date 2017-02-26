@@ -71,7 +71,7 @@ public class ServicesHelper {
         Volley.newRequestQueue(context).add(request);
     }
 
-    public void getHomePosts(Context context, Response.Listener<JSONObject> success, Response.ErrorListener errorListener){
+    public void getHomePosts(Context context, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
         String URL = Constants.URL_GET_HOME_POSTS;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), success, errorListener);
         request.setRetryPolicy(new DefaultRetryPolicy(
@@ -92,9 +92,15 @@ public class ServicesHelper {
         Volley.newRequestQueue(context).add(request);
     }
 
-    public void getPostbyID(Context context, String id, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
-        String URL = Constants.URL_GET_POST_BY_ID;
-        URL = String.format(URL, id);
+    public void getPostbyID(Context context, String id, String slug, Response.Listener<JSONObject> success, Response.ErrorListener errorListener) {
+        String URL = null;
+        if (id.isEmpty() && !slug.isEmpty()) {
+            URL = Constants.URL_GET_POST_BY_SLUG;
+            URL = String.format(URL, slug);
+        } else if (!id.isEmpty() && slug.isEmpty()) {
+            URL = Constants.URL_GET_POST_BY_ID;
+            URL = String.format(URL, id);
+        }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), success, errorListener);
 //        StringRequest stringRequest = new StringRequest(URL, success, errorListener);
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
