@@ -154,6 +154,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                     editor.putString(Constants.User_ID, "");
                     editor.putString(Constants.User_NAME, "");
                     editor.putString(Constants.User_EMAIL, "");
+                    editor.putBoolean(Constants.ifNotifications, false);
                     editor.apply();
                     Intent intent = new Intent(getActivity(), Sign_up_Activity.class);
                     ActivityCompat.finishAffinity(getActivity());

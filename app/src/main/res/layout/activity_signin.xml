@@ -7,43 +7,44 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/menu_categroies"
+        android:background="@mipmap/bg_filter_with_logo"
         android:gravity="top"
-        android:padding="@dimen/menu_top"
-        android:layout_margin="@dimen/menu_categroies"
-        android:background="@mipmap/bg_filter_with_logo">
-    <ImageView
-        android:id="@+id/logo_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/logo_ic"
-        android:visibility="invisible"/>
+        android:padding="@dimen/menu_top">
 
-    <TextView
-        android:id="@+id/signin_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/logo_iv"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="@dimen/menu_categroies"
-        android:text="@string/sign_in"
-        android:textColor="@color/second_white"
-        android:textSize="@dimen/sTitle"/>
+        <ImageView
+            android:id="@+id/logo_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/logo_ic"
+            android:visibility="invisible" />
 
+        <TextView
+            android:id="@+id/signin_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo_iv"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/menu_categroies"
+            android:text="@string/sign_in"
+            android:textColor="@color/second_white"
+            android:textSize="@dimen/sTitle" />
 
 
         <EditText
             android:id="@+id/email_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/signin_tv"
             android:layout_margin="@dimen/menu_categroies"
             android:background="@mipmap/bg_et"
             android:gravity="center"
             android:hint="@string/sign_up_username"
-            android:layout_below="@+id/signin_tv"
             android:inputType="textEmailAddress"
             android:textColor="@color/second_white" />
 
@@ -70,6 +71,16 @@
             android:background="@drawable/signup_btn"
             android:text="@string/sign_in"
             android:textColor="@color/second_white" />
-    </RelativeLayout>
 
+        <TextView
+            android:id="@+id/forget_pw_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/signin_btn"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/menu_categroies"
+            android:text="@string/forgot_password"
+            android:textColor="@color/second_white"
+            android:textSize="@dimen/sSubTitle" />
+    </RelativeLayout>
 </RelativeLayout>

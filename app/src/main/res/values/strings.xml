@@ -41,6 +41,7 @@
     <string name="already_have_account">Already have account ?</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_out">Sign out</string>
+    <string name="forgot_password">forgot password?</string>
 
 
     <string name="sign_up_with_apps">or Sign in with</string>
