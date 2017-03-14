@@ -8,19 +8,26 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/second_white"
+        android:background="@color/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/all_pb"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:indeterminate="true" />
+            <!--<ProgressBar-->
+                <!--android:id="@+id/all_pb"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:indeterminate="true"-->
+                <!--android:visibility="gone" />-->
+
+            <ImageView
+                android:id="@+id/gif"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"/>
 
             <LinearLayout
                 android:id="@+id/fragment_ll"
@@ -87,8 +94,7 @@
                             android:layout_below="@+id/title_tv"
                             android:gravity="start"
                             android:padding="@dimen/menu_top"
-                            android:textColor="@color/second_white"
-                             />
+                            android:textColor="@color/second_white" />
                     </RelativeLayout>
                 </FrameLayout>
 
@@ -111,8 +117,7 @@
                         android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
                 </FrameLayout>
 
             </LinearLayout>

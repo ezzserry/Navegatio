@@ -449,7 +449,7 @@ public class Sign_up_Activity extends FragmentActivity implements View.OnClickLi
 //                            R.mipmap.ic_launcher,
 //                            R.mipmap.ic_launcher));
 //
-//            //Loading image
+//            //loading_gif image
 //            profilePhoto.setImageUrl(acct.getPhotoUrl().toString(), imageLoader);
 
         } else {

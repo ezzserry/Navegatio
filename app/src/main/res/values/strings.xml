@@ -40,9 +40,10 @@
     <string name="sign_up_text">SIGN UP</string>
     <string name="already_have_account">Already have account ?</string>
     <string name="sign_in">SIGN IN</string>
+    <string name="submit">Submit</string>
     <string name="sign_out">Sign out</string>
     <string name="forgot_password">forgot password?</string>
-
+    <string name="reset_password">RESET PASSWORD</string>
 
     <string name="sign_up_with_apps">or Sign in with</string>
     <!--<string name="sign_up_with_twitter">Sign in with Twitter</string>-->

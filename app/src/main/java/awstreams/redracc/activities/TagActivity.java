@@ -1,15 +1,16 @@
 package awstreams.redracc.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -41,7 +44,7 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLis
     private TextView tvTagTitle;
     private GridLayoutManager lLayout;
     private RecyclerView mRecyclerView;
-    private ProgressBar progressBar, allProgressBar;
+    private ProgressBar progressBar;
     private LinearLayout fragmentLinearLayout;
     private NewslistAdapter newslistAdapter;
     private List<NewsItem> postItemsList;
@@ -51,6 +54,7 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLis
     private SwipeRefreshLayout swipeRefreshLayout;
     private Boolean bRefresh;
     private FrameLayout flTop, flbottom;
+    private ImageView gif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +81,16 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLis
     }
 
     private void initViews() {
+        gif = (ImageView) findViewById(R.id.gif);
+        Glide.with(getApplicationContext())
+                .load(R.raw.loading_gif)
+                .into(new GlideDrawableImageViewTarget(gif));
         progressBar = (ProgressBar) findViewById(R.id.loadingpanel);
-        allProgressBar = (ProgressBar) findViewById(R.id.all_pb);
         fragmentLinearLayout = (LinearLayout) findViewById(R.id.fragment_ll);
 
         tvTagTitle = (TextView) findViewById(R.id.tagtitle_tv);
         tvTagTitle.setTypeface(Constants.getTypeface_Medium(this));
-        tvTagTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,Constants.getTextAppSize(this,true,false,false));
+        tvTagTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.getTextAppSize(this, true, false, false));
         lLayout = new GridLayoutManager(this, 2);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -132,10 +139,11 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLis
                             e.printStackTrace();
                             progressBar.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
-                            if (bRefresh )
+                            if (bRefresh)
                                 swipeRefreshLayout.setRefreshing(false);
                         }
-                        allProgressBar.setVisibility(View.GONE);
+
+                        gif.setVisibility(View.GONE);
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
                     }
                 }, new Response.ErrorListener() {
@@ -144,9 +152,9 @@ public class TagActivity extends AppCompatActivity implements OnNewsItemClickLis
                         Toast.makeText(TagActivity.this, "connection error ", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
-                        if (bRefresh )
+                        if (bRefresh)
                             swipeRefreshLayout.setRefreshing(false);
-                        allProgressBar.setVisibility(View.GONE);
+                        gif.setVisibility(View.GONE);
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
                     }
                 });

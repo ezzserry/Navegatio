@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,7 +56,7 @@ public class Home_Fragment extends Fragment {
     private View view;
     private GridLayoutManager lLayout;
     private RecyclerView mRecyclerView;
-    private ProgressBar progressBar, topProgressBar, allProgressBar;
+    private ProgressBar progressBar, topProgressBar;
     private LinearLayout fragmentLinearLayout;
     private NewslistAdapter newslistAdapter;
     private List<NewsItem> postItemsList;
@@ -69,6 +70,7 @@ public class Home_Fragment extends Fragment {
     private NewsItem newsItem;
     private FrameLayout topContainer;
     private int imgHeight;
+    private ImageView gif;
 
     public Home_Fragment(String category_id, String query, Boolean isHome) {
         this.sCategory_id = category_id;
@@ -88,6 +90,7 @@ public class Home_Fragment extends Fragment {
         cd = new ConnectionDetector(getActivity());
         isInternetPresent = cd.isConnectingToInternet();
         if (isInternetPresent) {
+
             if (sCategory_id != null && sQuery == null && !isHome) {
                 bRefresh = false;
                 getCategoryPosts();
@@ -112,7 +115,8 @@ public class Home_Fragment extends Fragment {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 if (bRefresh == true)
                     swipeRefreshLayout.setRefreshing(false);
-                allProgressBar.setVisibility(View.GONE);
+               
+                gif.setVisibility(View.GONE);
                 fragmentLinearLayout.setVisibility(View.VISIBLE);
                 topProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "no internet connection", Toast.LENGTH_LONG).show();
@@ -125,9 +129,12 @@ public class Home_Fragment extends Fragment {
 
 
     private void initViews() {
+        gif = (ImageView) view.findViewById(R.id.gif);
+        Glide.with(getApplicationContext())
+                .load(R.raw.loading_gif)
+                .into(new GlideDrawableImageViewTarget(gif));
         progressBar = (ProgressBar) view.findViewById(R.id.loadingpanel);
         topProgressBar = (ProgressBar) view.findViewById(R.id.topimage_pb);
-        allProgressBar = (ProgressBar) view.findViewById(R.id.all_pb);
         fragmentLinearLayout = (LinearLayout) view.findViewById(R.id.fragment_ll);
 
         topImage = (ImageView) view.findViewById(R.id.top_iv);
@@ -210,7 +217,8 @@ public class Home_Fragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 mRecyclerView.setVisibility(View.VISIBLE);
                             }
-                            allProgressBar.setVisibility(View.GONE);
+                            gif.setVisibility(View.GONE);
+                           
                             fragmentLinearLayout.setVisibility(View.VISIBLE);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -218,7 +226,9 @@ public class Home_Fragment extends Fragment {
                             mRecyclerView.setVisibility(View.VISIBLE);
                             if (bRefresh == true)
                                 swipeRefreshLayout.setRefreshing(false);
-                            allProgressBar.setVisibility(View.GONE);
+
+                            gif.setVisibility(View.GONE);
+                           
                             fragmentLinearLayout.setVisibility(View.VISIBLE);
                             topProgressBar.setVisibility(View.GONE);
                         }
@@ -231,7 +241,8 @@ public class Home_Fragment extends Fragment {
                         mRecyclerView.setVisibility(View.VISIBLE);
                         if (bRefresh == true)
                             swipeRefreshLayout.setRefreshing(false);
-                        allProgressBar.setVisibility(View.GONE);
+                        gif.setVisibility(View.GONE);
+                       
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
                         topProgressBar.setVisibility(View.GONE);
                     }
@@ -252,14 +263,16 @@ public class Home_Fragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
                         topContainer.setVisibility(View.GONE);
-                        allProgressBar.setVisibility(View.GONE);
+                        gif.setVisibility(View.GONE);
+                       
                         fragmentLinearLayout.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progressBar.setVisibility(View.GONE);
                     mRecyclerView.setVisibility(View.VISIBLE);
-                    allProgressBar.setVisibility(View.GONE);
+                    gif.setVisibility(View.GONE);
+                   
                     fragmentLinearLayout.setVisibility(View.VISIBLE);
                 }
 
@@ -270,7 +283,8 @@ public class Home_Fragment extends Fragment {
                 Toast.makeText(getActivity(), "connection error ", Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
-                allProgressBar.setVisibility(View.GONE);
+               
+                gif.setVisibility(View.GONE);
                 fragmentLinearLayout.setVisibility(View.VISIBLE);
             }
         });
@@ -295,9 +309,12 @@ public class Home_Fragment extends Fragment {
                         }
                         split(postItemsList);
                         progressBar.setVisibility(View.GONE);
+
                         mRecyclerView.setVisibility(View.VISIBLE);
                     }
-                    allProgressBar.setVisibility(View.GONE);
+
+                    gif.setVisibility(View.GONE);
+                   
                     fragmentLinearLayout.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -305,7 +322,7 @@ public class Home_Fragment extends Fragment {
                     mRecyclerView.setVisibility(View.VISIBLE);
                     if (bRefresh == true)
                         swipeRefreshLayout.setRefreshing(false);
-                    allProgressBar.setVisibility(View.GONE);
+                   
                     fragmentLinearLayout.setVisibility(View.VISIBLE);
                     topProgressBar.setVisibility(View.GONE);
                 }
@@ -319,7 +336,8 @@ public class Home_Fragment extends Fragment {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 if (bRefresh == true)
                     swipeRefreshLayout.setRefreshing(false);
-                allProgressBar.setVisibility(View.GONE);
+                gif.setVisibility(View.GONE);
+               
                 fragmentLinearLayout.setVisibility(View.VISIBLE);
                 topProgressBar.setVisibility(View.GONE);
             }
@@ -334,7 +352,8 @@ public class Home_Fragment extends Fragment {
         updateUI(secondList);
         progressBar.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
-        allProgressBar.setVisibility(View.GONE);
+        gif.setVisibility(View.GONE);
+       
         fragmentLinearLayout.setVisibility(View.VISIBLE);
     }
 

@@ -51,6 +51,7 @@ public class Constants {
     public static final String URL_FEEDBACK = "http://redracc.com/mobile-api/feedback.php/?username=%s&feedback=%s";
     public static final String URL_NOTIFICATIONS = "http://redracc.com/pnfw/register/";
     public static final String URL_GET_TAG = URL_BASE + "get_tag_posts/?id=%s";
+    public static final String URL_REST_PASSWORD=URL_GET_BASE_USER+"retrieve_password/?user_login=%s"+ Ssl;
 
     public static final String isLoggedin = "isLogged";
     public static final String User_ID = "userid";

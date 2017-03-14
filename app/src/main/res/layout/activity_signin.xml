@@ -31,7 +31,6 @@
             android:layout_below="@+id/logo_iv"
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/menu_categroies"
-            android:text="@string/sign_in"
             android:textColor="@color/second_white"
             android:textSize="@dimen/sTitle" />
 
@@ -59,7 +58,8 @@
             android:gravity="center"
             android:hint="@string/sign_up_password"
             android:inputType="textPassword"
-            android:textColor="@color/second_white" />
+            android:textColor="@color/second_white"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/signin_btn"
@@ -69,7 +69,6 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/menu_categroies"
             android:background="@drawable/signup_btn"
-            android:text="@string/sign_in"
             android:textColor="@color/second_white" />
 
         <TextView
@@ -81,6 +80,8 @@
             android:layout_margin="@dimen/menu_categroies"
             android:text="@string/forgot_password"
             android:textColor="@color/second_white"
-            android:textSize="@dimen/sSubTitle" />
+            android:textSize="@dimen/sSubTitle"
+            android:visibility="gone" />
+
     </RelativeLayout>
 </RelativeLayout>

@@ -1,7 +1,9 @@
 package awstreams.redracc.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +19,9 @@ import org.json.JSONObject;
 import awstreams.redracc.R;
 import awstreams.redracc.helpers.Constants;
 import awstreams.redracc.helpers.ServicesHelper;
+import awstreams.redracc.helpers.Utils;
 
-public class ForgetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class ForgetPasswordActivity extends Activity implements View.OnClickListener {
     private EditText etUsername;
     private TextView tvSign_in;
     private Button btnSubmit;
@@ -52,6 +55,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         switch (view.getId()) {
             case R.id.signin_btn:
                 sUsername = etUsername.getText().toString();
+                Utils.showloading(this);
                 resetPassword(sUsername);
                 break;
         }
@@ -64,17 +68,25 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 try {
                     String status = response.getString("status");
                     if (status.equals("ok")) {
+                        Utils.dismissloading();
                         Toast.makeText(getApplicationContext(), response.getString("msg"), Toast.LENGTH_LONG).show();
-                    } else
+                        Intent intent = new Intent(ForgetPasswordActivity.this,Sign_in_Activity.class);
+                        startActivity(intent);
+                        ActivityCompat.finishAffinity(ForgetPasswordActivity.this);
+                        finish();
+                    } else {
+                        Utils.dismissloading();
                         Toast.makeText(getApplicationContext(), response.getString("msg"), Toast.LENGTH_LONG).show();
-
+                    }
                 } catch (JSONException e) {
+                    Utils.dismissloading();
                     Toast.makeText(getApplicationContext(), "connection error", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Utils.dismissloading();
                 Toast.makeText(getApplicationContext(), "connection error", Toast.LENGTH_LONG).show();
 
             }

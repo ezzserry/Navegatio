@@ -176,5 +176,17 @@ public class ServicesHelper {
         Volley.newRequestQueue(context).add(request);
 
     }
+
+    public void resetPassword(Context context,String username,Response.Listener<JSONObject> success,Response.ErrorListener errorListener){
+        String URL = Constants.URL_REST_PASSWORD;
+        URL = String.format(URL, username);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), success, errorListener);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(context).add(request);
+
+    }
 }
 

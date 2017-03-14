@@ -23,12 +23,10 @@ import awstreams.redracc.helpers.Constants;
 public class GCMListener extends GcmListenerService {
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
-    private boolean isLogged_in;
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        isLogged_in = sharedPrefs.getBoolean(Constants.isLoggedin, false);
 
         if (!sharedPrefs.getBoolean(Constants.ifNotifications, false) || !sharedPrefs.getBoolean(Constants.isLoggedin, false)) {
 
