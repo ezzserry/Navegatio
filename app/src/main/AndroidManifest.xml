@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="awstreams.redracc">
+    package="awstreams.navegatio">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -47,7 +47,7 @@
     <!-- android:screenSize="xlarge" /> -->
     <!-- </compatible-screens> -->
     <application
-        android:name=".helpers.MyApplication"
+        android:name="awstreams.navegatio.helpers.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo_ic"
         android:label="@string/app_name"
@@ -66,12 +66,12 @@
         </receiver>
 
         <activity
-            android:name=".activities.Base_Activity"
+            android:name="awstreams.navegatio.activities.Base_Activity"
             android:label="@string/title_activity_side_menu"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.Splash_Activity"
+            android:name="awstreams.navegatio.activities.Splash_Activity"
             android:screenOrientation="nosensor"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -81,12 +81,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.Sign_up_Activity"
+            android:name="awstreams.navegatio.activities.Sign_up_Activity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|adjustPan" />
         <activity
-            android:name=".activities.Sign_in_Activity"
+            android:name="awstreams.navegatio.activities.Sign_in_Activity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|adjustPan" />
@@ -104,18 +104,18 @@
             android:value="fc859c7933517f6aef1fe558890294a0fdba9366" />
 
         <activity
-            android:name=".activities.DetailedNews_Activity"
+            android:name="awstreams.navegatio.activities.DetailedNews_Activity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".notifications.GCMListener"
+            android:name="awstreams.navegatio.notifications.GCMListener"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <service android:name=".notifications.RegistrationServices" />
+        <service android:name="awstreams.navegatio.notifications.RegistrationServices" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
@@ -123,11 +123,11 @@
             android:exported="true" />
 
         <activity
-            android:name=".activities.TagActivity"
+            android:name="awstreams.navegatio.activities.TagActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ForgetPasswordActivity"
+            android:name="awstreams.navegatio.activities.ForgetPasswordActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

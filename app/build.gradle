@@ -22,7 +22,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "awstreams.redracc"
+        applicationId "awstreams.navegatio"
         minSdkVersion 17
         targetSdkVersion 23
         versionCode 6
