@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#606060</color>
-    <color name="colorPrimaryDark">#0F0F0F</color>
-    <color name="colorAccent">#DCDCDC</color>
+    <color name="colorPrimary">#2c1912</color>
+    <color name="colorPrimaryDark">#1c110d</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="white">#FFFF</color>
     <color name="second_white">#F1F1F1</color>
     <color name="music_yellow">#D49944</color>
