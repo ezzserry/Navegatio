@@ -126,7 +126,8 @@
                 android:layout_margin="@dimen/menu_categroies"
                 android:text="@string/sign_up_with_apps"
                 android:textColor="@color/second_white"
-                android:textSize="@dimen/sTitle"/>
+                android:textSize="@dimen/sTitle"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -134,7 +135,8 @@
                 android:layout_below="@+id/signin_tv"
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/menu_categroies"
-                android:gravity="start">
+                android:gravity="start"
+                android:visibility="gone">
 
                 <ImageButton
                     android:id="@+id/fb_btn"
